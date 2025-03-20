@@ -132,7 +132,7 @@ __pycache__/
 
 # Environments
 venv
-config/.env
+.env
 
 # Spyder project settings
 # .spyderproject

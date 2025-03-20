@@ -1,104 +1,71 @@
 import os
-from dotenv import load_dotenv
+import aiohttp
+from services.auth import get_access_token  # Importing auth function
 
-load_dotenv()
-
-# const { getToken } = require('../tokenManager'); 
 MOLI_BASE_URL = os.getenv("MOLI_BASE_URL")
 
-
-
-
-
-
-const getCustomerApi = async (msisdn) => {
-  const result = { msisdn };
-
-  let token;
-  try {
-    token = await getToken(); // Use the cached token
-  } catch (error) {
-    console.error("❌ Failed to fetch token:", error.message);
-    return result; // Return the result object with the error state
-  }
-
-  // GET Customer v3
-  try {
-    const getCustomerParams = new URLSearchParams({ msisdn });
-    const getCustomerURL = `${BASE_URL}/moli-customer/v3/customer?${getCustomerParams.toString()}`;    
+async def get_customer_api(msisdn):
+    result = {"msisdn": msisdn}
     
-    const apiResponse = await axios.get(getCustomerURL, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-    });
+    try:
+        token = await get_access_token()
+    except Exception as error:
+        print(f"❌ Failed to fetch token: {error}")
+        return result  # Return empty result
 
-    // console.log('🛠️ getCustomer Payload:', apiResponse?.data);
-    const idNo = apiResponse?.data?.[0]?.personalInfo?.[0]?.identification?.[0]?.idNo || 'N/A';
-    const idType = apiResponse?.data?.[0]?.personalInfo?.[0]?.identification?.[0]?.type?.code || 'NA';
-    const countryCode = apiResponse?.data?.[0]?.contact?.address?.[0]?.country?.code || 'NA' ;
-    console.log(`✅ getCustomerApi: ${apiResponse.status} id:${idType} ${idNo} countryCode:${countryCode}`);
+    get_customer_url = f"{MOLI_BASE_URL}/moli-customer/v3/customer?msisdn={msisdn}"
 
-    result.getCustomerApiData = {
-      httpStatus: `✅ ${apiResponse.status}`,
-      idNo: (idNo || "Null"),
-      idType: (idType || "Null"),
-      countryCode: (countryCode || "Null"),
-    };
+    try:
+        async with aiohttp.ClientSession() as session:
+            async with session.get(
+                get_customer_url,
+                headers={
+                    "Authorization": f"Bearer {token}",
+                    "Content-Type": "application/json",
+                },
+            ) as response:
 
-  } catch (error) {
-    const statusCode = error.response?.status || "Unknown Status";
-    const errorMessage = error.response?.data?.message || error.message || "Unknown Error";
-    console.error(`❌ getCustomerApi: Status - ${statusCode}, Error - ${errorMessage}`);
-    result.getCustomerApiData = `❌ ${statusCode}`;
-  }
+                response.raise_for_status()
+                data = await response.json()
 
-  return result;
-};
+                id_no = data[0]["personalInfo"][0]["identification"][0].get("idNo", "N/A")
+                id_type = data[0]["personalInfo"][0]["identification"][0]["type"].get("code", "NA")
+                country_code = data[0]["contact"]["address"][0]["country"].get("code", "NA")
 
-const postCustomerApi = async (msisdn, telco, id) => {
-  const result = { msisdn , telco, id };
-  let token;
-    try {
-      token = await getAccessToken(); 
-    } catch (error) {
-      console.error("❌ Failed to fetch token:", error.message);
-      return result; 
-    }
+                print(f"✅ get_customer_api: {response.status} id:{id_type} {id_no} countryCode:{country_code}")
 
-  // POST customer - TESTING
-  try {
-    const subscriberParams = new URLSearchParams({ msisdn, telco });
-    const subscriberURL = `${BASE_URL}/moli-subscriber/v1/subscriber?${subscriberParams.toString()}`;    
-    
-    const subscriberResponse = await axios.get(subscriberURL, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-    });
+                result["getCustomerApiData"] = {
+                    "httpStatus": f"✅ {response.status}",
+                    "idNo": id_no,
+                    "idType": id_type,
+                    "countryCode": country_code,
+                }
 
-    // console.log('🛠️ getSubscriber Payload:', subscriberResponse?.data);
-    const subscriberTelco = subscriberResponse.data.telco;
-    const payType = subscriberResponse.data.type;  
+    except aiohttp.ClientResponseError as error:
+        print(f"❌ get_customer_api: Status - {error.status}, Error - {error.message}")
+        result["getCustomerApiData"] = f"❌ {error.status}"
 
-    console.log(`✅ postCustomerApi: ${subscriberResponse.status} ${subscriberTelco} ${payType}`);
+    except Exception as error:
+        print(f"❌ Error fetching customer API: {error}")
+        result["getCustomerApiData"] = "❌ Unknown Error"
 
-    result.postCustomerApiData = {
-      httpStatus: `✅ ${subscriberResponse.status}`,
-      telco: subscriberTelco || "Null",
-      payType: payType || "Null",   
-    };
+    return result
 
-  } catch (error) {
-    const statusCode = error.response?.status || "Unknown Status";
-    const errorMessage = error.response?.data?.message || error.message || "Unknown Error";
-    console.error(`❌ postCustomerApi: Status - ${statusCode}, Error - ${errorMessage}`);
-    result.postCustomerApiData = `❌ ${statusCode}`;
-  }
 
-  return result;
-};
+async def post_customer_api(msisdn, telco, id):
+    result = {"msisdn": msisdn, "telco": telco, "id": id}
+    try:
+        token = await get_access_token()
+    except Exception as error:
+        print(f"❌ Failed to fetch token: {error}")
+        return result
 
-module.exports = { getCustomerApi, postCustomerApi };
+    print(f"🚧 post_customer_api function needs implementation")
+    return result
+
+
+# Example test run (only works in an async context)
+if __name__ == "__main__":
+    import asyncio
+    msisdn_test = "60123456789"
+    asyncio.run(get_customer_api(msisdn_test))
