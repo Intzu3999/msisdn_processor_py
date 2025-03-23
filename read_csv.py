@@ -3,6 +3,7 @@ import asyncio
 import aiohttp
 import pandas as pd
 import argparse
+from utils.datetime_utils import date_with_time
 from dotenv import load_dotenv
 from utils.field_mapping import FIELD_MAP, extract_fields_from_response
 from utils.api_map import api_map
@@ -16,7 +17,7 @@ args = parser.parse_args()
 
 CSV_PATH = os.path.join(os.path.dirname(__file__), "dataStream", f"{args.filename}.csv")
 OUTPUT_FOLDER = os.path.join(os.path.dirname(__file__), "results")
-OUTPUT_FILE = os.path.join(OUTPUT_FOLDER, f"{args.service}.xlsx")
+OUTPUT_FILE = os.path.join(OUTPUT_FOLDER, f"{args.filename}-{args.service}-{date_with_time()}.xlsx")
 os.makedirs(OUTPUT_FOLDER, exist_ok=True)
 
 async def process_data():

@@ -1,6 +1,5 @@
 import os
 import aiohttp
-import pandas as pd
 import urllib.parse
 from utils.handle_api_error import handle_api_error
 from asyncio import Semaphore
@@ -39,17 +38,24 @@ async def get_customer_api(msisdn):
 
                     # print("🛠️ get_customer_api Payload:", data)
 
-                    id_no = (data[0].get("personalInfo", [{}])[0].get("identification", [{}])[0].get("idNo", "N/A"))
-                    id_type = data[0]["personalInfo"][0]["identification"][0]["type"].get("code", "NA")
-                    country_code = data[0]["contact"]["address"][0]["country"].get("code", "NA")
+                    customer_data = data[0] if isinstance(data, list) and data else {}
 
-                    print(f"✅ get_customer_api: {response.status} {msisdn} id:{id_type} {id_no} countryCode:{country_code}")
+                    personal_info = customer_data.get("personalInfo", [{}])[0]
+                    identification = personal_info.get("identification", [{}])[0]
+                    contact_info = customer_data.get("contact", {})
+                    address = contact_info.get("address", [{}])[0]
+
+                    extracted_data = {
+                        "idNo": identification.get("idNo", "N/A"),
+                        "idType": identification.get("type", {}).get("code", "NA"),
+                        "countryCode": address.get("country", {}).get("code", "NA"),
+                    }
+
+                    print(f"✅ get_customer_api: {response.status} {msisdn} id:{extracted_data['idType']} {extracted_data['idNo']} countryCode:{extracted_data['countryCode']}")
 
                     result[service_data] = {
                         "customerStatus": f"✅ {response.status}",
-                        "idType": id_type,
-                        "idNo": id_no,
-                        "countryCode": country_code,
+                        **extracted_data,  # Expands dictionary to maintain consistency
                     }
 
         except aiohttp.ClientResponseError as error:

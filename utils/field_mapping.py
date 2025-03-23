@@ -47,4 +47,13 @@ FIELD_MAP = {
         "accountId": ["accountId"],
         "billingCycle": ["billingCycle"],
     },
+    "get_contract_api": {
+        "customerStatus": ["customerStatus"],
+        "msisdn": ["msisdn"],
+        "telco": ["telco"],
+        "productType": ["productType"],
+        "productName": ["productName"],
+        "startDate": ["startDate"],
+        "status": ["status"],
+    },
 }
