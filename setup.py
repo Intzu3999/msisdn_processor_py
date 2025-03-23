@@ -7,6 +7,10 @@ setup(
     packages=find_packages(),
     install_requires=[
         'aiohttp',
+        'openpyxl',
+        'pandas',
+        'python3',
         'python-dotenv',
+        'requests'
     ],
 )
