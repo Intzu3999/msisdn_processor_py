@@ -1,7 +1,8 @@
 import os
 import aiohttp
 import pandas as pd
-from utils import handle_api_error
+import urllib.parse
+from utils.handle_api_error import handle_api_error
 from asyncio import Semaphore
 from services.auth import get_access_token
 
@@ -20,16 +21,13 @@ async def get_customer_api(msisdn):
             print(f"❌ Failed to fetch token: {error}")
             return result  # Return empty result
 
-        #THERE IS ANOTHER APPROACH: ISOLATE THE URL AND PARAMS AND PATH.
-        # get_customer_params = {"msisdn": msisdn}
-        # get_customer_url = f"{MOLI_BASE_URL}/moli-customer/v3/customer"
-        # THEN, AT aiohttp.ClientSession() ADD: params=get_customer_params) as response:
-        get_customer_url = f"{MOLI_BASE_URL}/moli-customer/v3/customer?msisdn={msisdn}"
+        get_customer_api_params = urllib.parse.urlencode({"msisdn": msisdn})
+        get_customer_api_url = f"{MOLI_BASE_URL}/moli-customer/v3/customer?{get_customer_api_params}"
 
         try:
             async with aiohttp.ClientSession() as session:
                 async with session.get(
-                    get_customer_url,
+                    get_customer_api_url,
                     headers={
                         "Authorization": f"Bearer {token}",
                         "Content-Type": "application/json",
@@ -38,6 +36,8 @@ async def get_customer_api(msisdn):
 
                     response.raise_for_status()
                     data = await response.json()
+
+                    # print("🛠️ get_customer_api Payload:", data)
 
                     id_no = (data[0].get("personalInfo", [{}])[0].get("identification", [{}])[0].get("idNo", "N/A"))
                     id_type = data[0]["personalInfo"][0]["identification"][0]["type"].get("code", "NA")

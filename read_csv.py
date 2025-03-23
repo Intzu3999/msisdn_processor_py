@@ -4,10 +4,8 @@ import aiohttp
 import pandas as pd
 import argparse
 from dotenv import load_dotenv
-from services.customer.get_customer_api import get_customer_api
-from services.customer.put_check_blacklist_api import put_check_blacklist_api
-from services.subscriber.get_subscriber_api import get_subscriber_api
-from services.account.get_account_structure_api import get_account_structure_api
+from utils.field_mapping import FIELD_MAP, extract_fields_from_response
+from utils.api_map import api_map
 
 load_dotenv()
 
@@ -20,13 +18,6 @@ CSV_PATH = os.path.join(os.path.dirname(__file__), "dataStream", f"{args.filenam
 OUTPUT_FOLDER = os.path.join(os.path.dirname(__file__), "results")
 OUTPUT_FILE = os.path.join(OUTPUT_FOLDER, f"{args.service}.xlsx")
 os.makedirs(OUTPUT_FOLDER, exist_ok=True)
-
-api_map = {
-    "get_customer_api": get_customer_api,
-    "get_subscriber_api": get_subscriber_api,
-    "get_account_structure_api": get_account_structure_api,
-    "put_check_blacklist_api": put_check_blacklist_api,
-}
 
 async def process_data():
     """Reads CSV, processes API calls, and saves results."""
@@ -63,26 +54,15 @@ async def fetch_api_data(msisdn, index, results, service):
 
         service_data = f"{service}_data"
         data = response.get(service_data, {})
-        
-        customer_status = data.get("customerStatus", "❌ Failed")
-        id_no = data.get("idNo", "N/A")
-        id_type = data.get("idType", "N/A")
-        country_code = data.get("countryCode", "N/A")
 
-        result_entry = {
-            "msisdn": msisdn,
-            "customerStatus": customer_status,
-            "idNo": id_no,
-            "idType": id_type,
-            "countryCode": country_code,
-        }
+        field_mapping = FIELD_MAP.get(service, {})
+        extracted_data = extract_fields_from_response(data, field_mapping, service)
 
-        results.append(result_entry)
+        result_entry = {"msisdn": msisdn, **extracted_data} # Always include msisdn
+        results.append(result_entry)      
 
     except Exception as e:
         print(f"❌ Error processing {msisdn}: {e}")
-
-
 
 def save_results_to_excel(results):
     """Save processed customer data to an Excel file."""
