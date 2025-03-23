@@ -11,6 +11,7 @@ setup(
         'pandas',
         'python3',
         'python-dotenv',
-        'requests'
+        'requests',
+        'semaphore'
     ],
 )

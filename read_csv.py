@@ -1,5 +1,6 @@
 import os
 import asyncio
+import aiohttp
 import pandas as pd
 import argparse
 from dotenv import load_dotenv
@@ -24,7 +25,7 @@ api_map = {
     "customer": get_customer_api,
     "subscriber": get_subscriber_api,
     "accountStructure": get_accountStructure_api,
-    "checkBlacklist": put_checkBlacklist_api
+    "checkBlacklist": put_checkBlacklist_api,
 }
 
 async def process_data():
@@ -65,19 +66,21 @@ async def fetch_api_data(msisdn, index, results, service):
         api_func = api_map[service]
         response = await api_func(msisdn)
 
-        http_status = response.get("getCustomerApiData", {}).get("httpStatus", "❌ Failed")
-        id_no = response.get("getCustomerApiData", {}).get("idNo", "N/A")
-        id_type = response.get("getCustomerApiData", {}).get("idType", "N/A")
-        country_code = response.get("getCustomerApiData", {}).get("countryCode", "N/A")
+        data = response.get("getCustomerApiData", {})
+        customer_status = data.get("customerStatus", "❌ Failed")
+        id_no = data.get("idNo", "N/A")
+        id_type = data.get("idType", "N/A")
+        country_code = data.get("countryCode", "N/A")
 
         result_entry = {
             "msisdn": msisdn,
-            "customerStatus": http_status,
+            "customerStatus": customer_status,
             "idNo": id_no,
             "idType": id_type,
-            "countryCode": country_code
+            "countryCode": country_code,
         }
 
+        results.append(result_entry)
 
         # API CHAINING EXAMPLE
         if service == "customer" and id_no != "N/A":
