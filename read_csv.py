@@ -5,15 +5,15 @@ import pandas as pd
 import argparse
 from dotenv import load_dotenv
 from services.customer.get_customer_api import get_customer_api
-from services.customer.put_checkBlacklist_api import put_checkBlacklist_api
+from services.customer.put_check_blacklist_api import put_check_blacklist_api
 from services.subscriber.get_subscriber_api import get_subscriber_api
-from services.account.get_accountStructure_api import get_accountStructure_api
+from services.account.get_account_structure_api import get_account_structure_api
 
 load_dotenv()
 
 parser = argparse.ArgumentParser(description="Process CSV & API calls.")
 parser.add_argument("filename", nargs="?", default="test", help="CSV file name (without extension)")
-parser.add_argument("--service", default="customer", help="API service to run")
+parser.add_argument("--service", default="get_customer_api", help="API service to run")
 args = parser.parse_args()
 
 CSV_PATH = os.path.join(os.path.dirname(__file__), "dataStream", f"{args.filename}.csv")
@@ -22,10 +22,10 @@ OUTPUT_FILE = os.path.join(OUTPUT_FOLDER, f"{args.service}.xlsx")
 os.makedirs(OUTPUT_FOLDER, exist_ok=True)
 
 api_map = {
-    "customer": get_customer_api,
-    "subscriber": get_subscriber_api,
-    "accountStructure": get_accountStructure_api,
-    "checkBlacklist": put_checkBlacklist_api,
+    "get_customer_api": get_customer_api,
+    "get_subscriber_api": get_subscriber_api,
+    "get_account_structure_api": get_account_structure_api,
+    "put_check_blacklist_api": put_check_blacklist_api,
 }
 
 async def process_data():
@@ -52,11 +52,6 @@ async def process_data():
 
     save_results_to_excel(results)
 
-
-
-
-
-
 async def fetch_api_data(msisdn, index, results, service):
     try:
         if service not in api_map:
@@ -66,7 +61,9 @@ async def fetch_api_data(msisdn, index, results, service):
         api_func = api_map[service]
         response = await api_func(msisdn)
 
-        data = response.get("getCustomerApiData", {})
+        service_data = f"{service}_data"
+        data = response.get(service_data, {})
+        
         customer_status = data.get("customerStatus", "❌ Failed")
         id_no = data.get("idNo", "N/A")
         id_type = data.get("idType", "N/A")
@@ -82,20 +79,8 @@ async def fetch_api_data(msisdn, index, results, service):
 
         results.append(result_entry)
 
-        # API CHAINING EXAMPLE
-        if service == "customer" and id_no != "N/A":
-            # subscriber_response = await get_subscriber_api(id_no)
-            # subscriber_status = subscriber_response.get("status", "Unknown")
-            subscriber_status = id_no
-            result_entry["subsciberStatus"] = subscriber_status 
-        results.append(result_entry)
-
     except Exception as e:
         print(f"❌ Error processing {msisdn}: {e}")
-
-
-
-
 
 
 

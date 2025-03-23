@@ -2,7 +2,7 @@ import os
 import aiohttp
 from services.auth import get_access_token
 
-async def put_checkBlacklist_api(msisdn):
+async def put_check_blacklist_api(msisdn):
     result = {"idNo": msisdn}
 
     try:
