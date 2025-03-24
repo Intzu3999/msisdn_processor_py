@@ -30,7 +30,7 @@ FIELD_MAP = {
         "countryCode": ["countryCode"],
     },
     "get_subscriber_api": {
-        "httpStatus": ["httpStatus"],
+        "customerStatus": ["customerStatus"],
         "telco": ["telco"],
         "activeDate": ["activeDate"],
         "payType": ["payType"],
@@ -43,7 +43,7 @@ FIELD_MAP = {
         "tenure": ["tenure"],
     },
     "get_account_structure_api": {
-        "accountStatus": ["accountStatus"],
+        "customerStatus": ["customerStatus"],
         "accountId": ["accountId"],
         "billingCycle": ["billingCycle"],
     },

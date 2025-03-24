@@ -10,8 +10,19 @@
 3) Safe data extraction using .get()! List safely to prevent IndexError when accessing nested lists. No crashes if payload is missing.
 
 # TO SETUP
-1) have python3 installed
-2) pip install -r requirements.txt
+1) Install python3.exe x64-bit
+ verify:
+ python --version
+ python -c "import platform; print(platform.architecture())" 
+2) At root project create new virtual env: python -m venv venv 
+3) Start Python's virtual env: venv\Scripts\activate
+4) python.exe -m pip install --upgrade pip
+5) setuptools and wheel: pip install --upgrade setuptools wheel
+6) pip install -r requirements.txt
+ if panda failing it is most likely due to your venv setup.
+ pip install --upgrade setuptools wheel meson ninja cython numpy (and any other missing/failed dependency installation based from your log)
+ pip install --force-reinstall --no-cache-dir pandas
+7) To close Python's virtual env: terminate
 
 # TO RUN TEST
 1) python test/test_script_name.test.py
@@ -21,8 +32,8 @@
 2) python read_csv.py csvFileName --service servine_name
 
 # TO ADD / BUILD 
-1) get_subscriber-api, get_account_structure_api 
-3) chain API calls
+1) get_account_structure_api 
+2) chain API calls
 
 # TO LEARN AND IMPROVE
 1) logging and sys

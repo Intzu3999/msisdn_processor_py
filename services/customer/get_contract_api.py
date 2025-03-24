@@ -14,6 +14,7 @@ async def get_contract_api(msisdn):
         service = "get_contract_api"
         service_data = f"{service}_data"
         result = {"msisdn": msisdn}
+        
         try:
             token = await get_access_token()
         except Exception as error:
@@ -21,16 +22,14 @@ async def get_contract_api(msisdn):
             return result  # Return empty result
 
         get_contract_api_url = f"{MOLI_BASE_URL}/moli-customer/v1/customer/{msisdn}/contract"
+        headers = {
+            "Authorization": f"Bearer {token}",
+            "Content-Type": "application/json",
+        }
+
         try:
             async with aiohttp.ClientSession() as session:
-                async with session.get(
-                    get_contract_api_url,
-                    headers={
-                        "Authorization": f"Bearer {token}",
-                        "Content-Type": "application/json",
-                    },
-                ) as response:
-
+                async with session.get(get_contract_api_url, headers=headers) as response:
                     response.raise_for_status()
                     data = await response.json()
 
@@ -51,13 +50,14 @@ async def get_contract_api(msisdn):
 
                     result[service_data] = {
                         "customerStatus": f"✅ {response.status}",
-                        **extracted_data,  # Expands dictionary to maintain consistency
+                        **extracted_data,
                     }
+                    return result
 
         except aiohttp.ClientResponseError as error:
             return await handle_api_error(error, msisdn, service)
 
         except Exception as error:
             return await handle_api_error(error, msisdn, service)
-        
+
         return result

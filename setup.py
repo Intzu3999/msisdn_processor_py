@@ -9,9 +9,7 @@ setup(
         'aiohttp',
         'openpyxl',
         'pandas',
-        'python3',
         'python-dotenv',
-        'requests',
-        'semaphore'
+        'requests'
     ],
 )
