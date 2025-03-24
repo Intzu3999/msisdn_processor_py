@@ -43,7 +43,6 @@ async def get_subscriber_api(msisdn):
                     extracted_data = {
                         "msisdn": msisdn,  # Ensure `msisdn` is included
                         "telco": subscriber_data.get("telco", "N/A"),
-                        "activeDate": subscriber_data.get("activeDate", "N/A"),
                         "payType": subscriber_data.get("type", "N/A"),
                         "isPrincipal": subscriber_data.get("isPrincipal", "N/A"),
                         "status": subscriber_data.get("status", "N/A"),
@@ -51,6 +50,7 @@ async def get_subscriber_api(msisdn):
                         "customerType": next(iter(subscriber_data.get("characteristic", {}).get("customerInfo", [{}])), {}).get("type", {}).get("text", "N/A"),
                         "subscriberType": next(iter(subscriber_data.get("characteristic", {}).get("subscriberInfo", {}).get("subscriberType", [{}])), {}).get("text", "N/A"),
                         "telecomType": next(iter(subscriber_data.get("characteristic", {}).get("subscriberInfo", {}).get("telecomType", [{}])), {}).get("text", "N/A"),
+                        "activeDate": subscriber_data.get("activeDate", "N/A"),
                     }
 
                     raw_tenure = subscriber_data.get("characteristic", {}).get("lifeCycleInfo", {}).get("tenure", "0")
