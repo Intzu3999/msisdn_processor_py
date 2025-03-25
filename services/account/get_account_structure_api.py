@@ -14,48 +14,55 @@ async def get_account_structure_api(msisdn):
     async with service_rate_limiter:
         service = "get_account_structure_api"
         service_data = f"{service}_data"
+        level = "customer"
         result = {"msisdn": msisdn}
+        
         try:
             token = await get_access_token()
         except Exception as error:
             print(f"❌ Failed to fetch token: {error}")
-            return result  # Return empty result
+            return result 
 
-        get_account_structure_api_params = urllib.parse.urlencode({"msisdn": msisdn})
-        get_account_structure_api_url = f"{MOLI_BASE_URL}/moli-customer/v3/customer?{get_account_structure_api_params}"
+        get_account_structure_api_params = urllib.parse.urlencode({"level": level})
+        get_account_structure_api_url = f"{MOLI_BASE_URL}/moli-account/v1/accounts/{msisdn}/structure?{get_account_structure_api_params}"
+
+        headers = {
+            "Authorization": f"Bearer {token}",
+            "Content-Type": "application/json",
+        }
 
         try:
             async with aiohttp.ClientSession() as session:
-                async with session.get(
-                    get_account_structure_api_url,
-                    headers={
-                        "Authorization": f"Bearer {token}",
-                        "Content-Type": "application/json",
-                    },
-                ) as response:
-
+                async with session.get(get_account_structure_api_url, headers=headers) as response:
                     response.raise_for_status()
                     data = await response.json()
-
+                    
                     # print("🛠️ get_account_structure_api Payload:", data)
 
-                    id_no = (data[0].get("personalInfo", [{}])[0].get("identification", [{}])[0].get("idNo", "N/A"))
-                    id_type = data[0]["personalInfo"][0]["identification"][0]["type"].get("code", "NA")
-                    country_code = data[0]["contact"]["address"][0]["country"].get("code", "NA")
+                    account_structure_data = data if isinstance(data, dict) else {}
 
-                    print(f"✅ get_account_structure_api: {response.status} {msisdn} id:{id_type} {id_no} countryCode:{country_code}")
+                    extracted_data = {
+                        "msisdn": account_structure_data.get("msisdn", "N/A"),
+                        "telco": account_structure_data.get("telco", "N/A"),
+                        "productType": account_structure_data.get("productType", "N/A"),  
+                        "productName": account_structure_data.get("productName", "N/A"), 
+                        "startDate": account_structure_data.get("startDate", "N/A"),
+                        "status": account_structure_data.get("status", "N/A"),
+                    }
+
+                    print(f"✅ get_account_structure_api: {response.status} {msisdn} {extracted_data['telco']} productType:{extracted_data['productType']} {extracted_data['productName']}")
 
                     result[service_data] = {
                         "customerStatus": f"✅ {response.status}",
-                        "idType": id_type,
-                        "idNo": id_no,
-                        "countryCode": country_code,
+                        **extracted_data,
                     }
+                    
+                    return result
 
         except aiohttp.ClientResponseError as error:
             return await handle_api_error(error, msisdn, service)
 
         except Exception as error:
             return await handle_api_error(error, msisdn, service)
-        
+
         return result
