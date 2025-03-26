@@ -1,8 +1,7 @@
 import os
 import aiohttp
-from services.auth import get_access_token
 
-async def get_familyGroup_api(msisdn):
+async def get_familyGroup_api(token, msisdn):
     result = {"msisdn": msisdn}
 
     print(f"Successfully called familyGroup API with {msisdn}")

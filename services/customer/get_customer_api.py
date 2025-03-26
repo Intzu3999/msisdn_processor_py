@@ -3,36 +3,28 @@ import aiohttp
 import urllib.parse
 from utils.handle_api_error import handle_api_error
 from asyncio import Semaphore
-from services.auth import get_access_token
 
 MOLI_BASE_URL = os.getenv("MOLI_BASE_URL")
 
 service_rate_limiter = Semaphore(1)
 
-async def get_customer_api(msisdn):
+async def get_customer_api(token, msisdn):
     async with service_rate_limiter:
         service = "get_customer_api"
         service_data = f"{service}_data"
         result = {"msisdn": msisdn}
-        try:
-            token = await get_access_token()
-        except Exception as error:
-            print(f"❌ Failed to fetch token: {error}")
-            return result  # Return empty result
 
         get_customer_api_params = urllib.parse.urlencode({"msisdn": msisdn})
         get_customer_api_url = f"{MOLI_BASE_URL}/moli-customer/v3/customer?{get_customer_api_params}"
 
+        headers = {
+            "Authorization": f"Bearer {token}",
+            "Content-Type": "application/json",
+        }
+        
         try:
             async with aiohttp.ClientSession() as session:
-                async with session.get(
-                    get_customer_api_url,
-                    headers={
-                        "Authorization": f"Bearer {token}",
-                        "Content-Type": "application/json",
-                    },
-                ) as response:
-
+                async with session.get(get_customer_api_url, headers=headers) as response:
                     response.raise_for_status()
                     data = await response.json()
 

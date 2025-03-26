@@ -4,23 +4,16 @@ import pandas as pd
 import urllib.parse
 from utils.handle_api_error import handle_api_error
 from asyncio import Semaphore
-from services.auth import get_access_token
 
 MOLI_BASE_URL = os.getenv("MOLI_BASE_URL")
 
 service_rate_limiter = Semaphore(5)
 
-async def get_subscriber_api(msisdn):
+async def get_subscriber_api(token, msisdn):
     async with service_rate_limiter:
         service = "get_subscriber_api"
         service_data = f"{service}_data"
         result = {"msisdn": msisdn}
-        
-        try:
-            token = await get_access_token()
-        except Exception as error:
-            print(f"❌ Failed to fetch token: {error}")
-            return result  # Return empty result
         
         get_subscriber_api_params = urllib.parse.urlencode({"msisdn": msisdn})
         get_subscriber_api_url = f"{MOLI_BASE_URL}/moli-subscriber/v1/subscriber?{get_subscriber_api_params}"

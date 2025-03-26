@@ -1,12 +1,5 @@
-
-
-async def post_customer_api(msisdn, telco, id):
+async def post_customer_api(token, msisdn, telco, id):
     result = {"msisdn": msisdn, "telco": telco, "id": id}
-    try:
-        token = await get_access_token()
-    except Exception as error:
-        print(f"❌ Failed to fetch token: {error}")
-        return result
 
     print(f"🚧 post_customer_api function needs implementation")
     return result

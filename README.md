@@ -29,11 +29,12 @@
 
 # TO RUN DATA PROCESSING SCRIPT
 1) python read_csv.py
-2) python read_csv.py csvFileName --service servine_name
+2) python read_csv.py csvFileName --service service_name
 
 # TO ADD / BUILD 
 1) get_account_structure_api 
 2) chain API calls
+3) improve token management. Call token only once!
 
 # TO LEARN AND IMPROVE
 1) logging and sys

@@ -8,7 +8,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 # Import services
 from services.auth import get_access_token
 
-def test_get_access_token():
+def ():
     """Test the get_access_token function without using pytest"""
     
     # Create and use a new event loop

@@ -3,23 +3,16 @@ import aiohttp
 import urllib.parse
 from utils.handle_api_error import handle_api_error
 from asyncio import Semaphore
-from services.auth import get_access_token
 
 MOLI_BASE_URL = os.getenv("MOLI_BASE_URL")
 
 service_rate_limiter = Semaphore(5)
 
-async def get_contract_api(msisdn):
+async def get_contract_api(token, msisdn):
     async with service_rate_limiter:
         service = "get_contract_api"
         service_data = f"{service}_data"
         result = {"msisdn": msisdn}
-        
-        try:
-            token = await get_access_token()
-        except Exception as error:
-            print(f"❌ Failed to fetch token: {error}")
-            return result  # Return empty result
 
         get_contract_api_url = f"{MOLI_BASE_URL}/moli-customer/v1/customer/{msisdn}/contract"
         headers = {
@@ -52,7 +45,6 @@ async def get_contract_api(msisdn):
                         "customerStatus": f"✅ {response.status}",
                         **extracted_data,
                     }
-                    return result
 
         except aiohttp.ClientResponseError as error:
             return await handle_api_error(error, msisdn, service)

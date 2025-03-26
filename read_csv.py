@@ -3,6 +3,7 @@ import asyncio
 import aiohttp
 import pandas as pd
 import argparse
+from services.auth import get_access_token
 from utils.datetime_utils import date_with_time
 from dotenv import load_dotenv
 from utils.field_mapping import FIELD_MAP, extract_fields_from_response
@@ -36,22 +37,24 @@ async def process_data():
     results = [] # Pandas new DataFrame
     tasks = [] # Panda's way process for each row asynchronously
 
+    token = await get_access_token()
+
     for index, row in df.iterrows():
         msisdn = row["msisdn"]
-        tasks.append(fetch_api_data(msisdn, index, results, args.service))
+        tasks.append(fetch_api_data(token, msisdn, index, results, args.service))
 
     await asyncio.gather(*tasks)
 
     save_results_to_excel(results)
 
-async def fetch_api_data(msisdn, index, results, service):
+async def fetch_api_data(token, msisdn, index, results, service):
     try:
         if service not in api_map:
             print(f"⚠️ Warning: API '{service}' is not mapped.")
             return
 
         api_func = api_map[service]
-        response = await api_func(msisdn)
+        response = await api_func(token, msisdn)
 
         service_data = f"{service}_data"
         data = response.get(service_data, {})
@@ -66,7 +69,6 @@ async def fetch_api_data(msisdn, index, results, service):
         print(f"❌ Error processing {msisdn}: {e}")
 
 def save_results_to_excel(results):
-    """Save processed customer data to an Excel file."""
     df_results = pd.DataFrame(results)
 
     try:
