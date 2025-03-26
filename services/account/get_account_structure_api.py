@@ -16,8 +16,8 @@ async def get_account_structure_api(token, msisdn):
         level = "customer"
         result = {"msisdn": msisdn}
 
-        get_account_structure_api_params = urllib.parse.urlencode({"level": level})
-        get_account_structure_api_url = f"{MOLI_BASE_URL}/moli-account/v1/accounts/{msisdn}/structure?{get_account_structure_api_params}"
+        api_params = urllib.parse.urlencode({"level": level})
+        api_url = f"{MOLI_BASE_URL}/moli-account/v1/accounts/{msisdn}/structure?{api_params}"
 
         headers = {
             "Authorization": f"Bearer {token}",
@@ -26,7 +26,7 @@ async def get_account_structure_api(token, msisdn):
 
         try:
             async with aiohttp.ClientSession() as session:
-                async with session.get(get_account_structure_api_url, headers=headers) as response:
+                async with session.get(api_url, headers=headers) as response:
                     response.raise_for_status()
                     data = await response.json()
                     

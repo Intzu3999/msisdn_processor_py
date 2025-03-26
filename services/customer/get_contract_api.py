@@ -14,7 +14,7 @@ async def get_contract_api(token, msisdn):
         service_data = f"{service}_data"
         result = {"msisdn": msisdn}
 
-        get_contract_api_url = f"{MOLI_BASE_URL}/moli-customer/v1/customer/{msisdn}/contract"
+        api_url = f"{MOLI_BASE_URL}/moli-customer/v1/customer/{msisdn}/contract"
         headers = {
             "Authorization": f"Bearer {token}",
             "Content-Type": "application/json",
@@ -22,7 +22,7 @@ async def get_contract_api(token, msisdn):
 
         try:
             async with aiohttp.ClientSession() as session:
-                async with session.get(get_contract_api_url, headers=headers) as response:
+                async with session.get(api_url, headers=headers) as response:
                     response.raise_for_status()
                     data = await response.json()
 

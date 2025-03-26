@@ -15,8 +15,8 @@ async def get_subscriber_api(token, msisdn):
         service_data = f"{service}_data"
         result = {"msisdn": msisdn}
         
-        get_subscriber_api_params = urllib.parse.urlencode({"msisdn": msisdn})
-        get_subscriber_api_url = f"{MOLI_BASE_URL}/moli-subscriber/v1/subscriber?{get_subscriber_api_params}"
+        api_params = urllib.parse.urlencode({"msisdn": msisdn})
+        api_url = f"{MOLI_BASE_URL}/moli-subscriber/v1/subscriber?{api_params}"
         
         headers = {
             "Authorization": f"Bearer {token}",
@@ -25,7 +25,7 @@ async def get_subscriber_api(token, msisdn):
         
         try:
             async with aiohttp.ClientSession() as session:
-                async with session.get(get_subscriber_api_url, headers=headers) as response:
+                async with session.get(api_url, headers=headers) as response:
                     response.raise_for_status()
                     data = await response.json()
 
