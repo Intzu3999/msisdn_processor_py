@@ -28,14 +28,14 @@ async def get_service_name_api(token, msisdn):
             async with aiohttp.ClientSession() as session:
                 async with session.get(api_url, headers=headers) as response:
                     response.raise_for_status()
-                    data = await response.json()
+                    payload = await response.json()
                     
                     # print("🛠️ get_service_name_api Payload:", data)
 
-                    service_name_data = data if isinstance(data, dict) else {}
+                    data = payload if isinstance(payload, dict) else {}
 
                     extracted_data = {
-                        "msisdn": service_name_data.get("msisdn", "N/A"),
+                        "msisdn": data.get("msisdn", "N/A"),
                     }
 
                     print(f"✅ get_account_structure_api: {response.status} {msisdn} {extracted_data['telco']} productType:{extracted_data['productType']} {extracted_data['productName']}")

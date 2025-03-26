@@ -27,26 +27,26 @@ async def get_subscriber_api(token, msisdn):
             async with aiohttp.ClientSession() as session:
                 async with session.get(api_url, headers=headers) as response:
                     response.raise_for_status()
-                    data = await response.json()
+                    payload = await response.json()
 
                     # print("🛠️ get_subscriber_api Payload:", data)
 
-                    subscriber_data = data if isinstance(data, dict) else {}
+                    data = payload if isinstance(payload, dict) else {}
 
                     extracted_data = {
                         "msisdn": msisdn,  # Ensure `msisdn` is included
-                        "telco": subscriber_data.get("telco", "N/A"),
-                        "payType": subscriber_data.get("type", "N/A"),
-                        "isPrincipal": subscriber_data.get("isPrincipal", "N/A"),
-                        "status": subscriber_data.get("status", "N/A"),
-                        "subscriptionName": next(iter(subscriber_data.get("subscriptions", {}).get("primary", [{}])), {}).get("name", "N/A"),
-                        "customerType": next(iter(subscriber_data.get("characteristic", {}).get("customerInfo", [{}])), {}).get("type", {}).get("text", "N/A"),
-                        "subscriberType": next(iter(subscriber_data.get("characteristic", {}).get("subscriberInfo", {}).get("subscriberType", [{}])), {}).get("text", "N/A"),
-                        "telecomType": next(iter(subscriber_data.get("characteristic", {}).get("subscriberInfo", {}).get("telecomType", [{}])), {}).get("text", "N/A"),
-                        "activeDate": subscriber_data.get("activeDate", "N/A"),
+                        "telco": data.get("telco", "N/A"),
+                        "payType": data.get("type", "N/A"),
+                        "isPrincipal": data.get("isPrincipal", "N/A"),
+                        "status": data.get("status", "N/A"),
+                        "subscriptionName": next(iter(data.get("subscriptions", {}).get("primary", [{}])), {}).get("name", "N/A"),
+                        "customerType": next(iter(data.get("characteristic", {}).get("customerInfo", [{}])), {}).get("type", {}).get("text", "N/A"),
+                        "subscriberType": next(iter(data.get("characteristic", {}).get("subscriberInfo", {}).get("subscriberType", [{}])), {}).get("text", "N/A"),
+                        "telecomType": next(iter(data.get("characteristic", {}).get("subscriberInfo", {}).get("telecomType", [{}])), {}).get("text", "N/A"),
+                        "activeDate": data.get("activeDate", "N/A"),
                     }
 
-                    raw_tenure = subscriber_data.get("characteristic", {}).get("lifeCycleInfo", {}).get("tenure", "0")
+                    raw_tenure = data.get("characteristic", {}).get("lifeCycleInfo", {}).get("tenure", "0")
                     extracted_data["tenure"] = f"{float(raw_tenure):.2f}" if raw_tenure.replace('.', '', 1).isdigit() else "0.00"
 
                     print(f"✅ get_subscriber_api: {response.status} {msisdn} {extracted_data['telco']} {extracted_data['payType']} {extracted_data['isPrincipal']} {extracted_data['status']} tenure:{extracted_data['tenure']}")

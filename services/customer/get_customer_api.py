@@ -26,15 +26,15 @@ async def get_customer_api(token, msisdn):
             async with aiohttp.ClientSession() as session:
                 async with session.get(api_url, headers=headers) as response:
                     response.raise_for_status()
-                    data = await response.json()
+                    payload = await response.json()
 
                     # print("🛠️ get_customer_api Payload:", data)
 
-                    customer_data = data[0] if isinstance(data, list) and data else {}
+                    data = payload[0] if isinstance(payload, list) and payload else {}
 
-                    personal_info = customer_data.get("personalInfo", [{}])[0]
+                    personal_info = data.get("personalInfo", [{}])[0]
                     identification = personal_info.get("identification", [{}])[0]
-                    contact_info = customer_data.get("contact", {})
+                    contact_info = data.get("contact", {})
                     address = contact_info.get("address", [{}])[0]
 
                     extracted_data = {

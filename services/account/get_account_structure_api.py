@@ -28,19 +28,19 @@ async def get_account_structure_api(token, msisdn):
             async with aiohttp.ClientSession() as session:
                 async with session.get(api_url, headers=headers) as response:
                     response.raise_for_status()
-                    data = await response.json()
+                    payload = await response.json()
                     
                     # print("🛠️ get_account_structure_api Payload:", data)
 
-                    account_structure_data = data if isinstance(data, dict) else {}
+                    data = payload if isinstance(payload, dict) else {}
 
                     extracted_data = {
-                        "msisdn": account_structure_data.get("msisdn", "N/A"),
-                        "telco": account_structure_data.get("telco", "N/A"),
-                        "productType": account_structure_data.get("productType", "N/A"),  
-                        "productName": account_structure_data.get("productName", "N/A"), 
-                        "startDate": account_structure_data.get("startDate", "N/A"),
-                        "status": account_structure_data.get("status", "N/A"),
+                        "msisdn": data.get("msisdn", "N/A"),
+                        "telco": data.get("telco", "N/A"),
+                        "productType": data.get("productType", "N/A"),  
+                        "productName": data.get("productName", "N/A"), 
+                        "startDate": data.get("startDate", "N/A"),
+                        "status": data.get("status", "N/A"),
                     }
 
                     print(f"✅ get_account_structure_api: {response.status} {msisdn} {extracted_data['telco']} productType:{extracted_data['productType']} {extracted_data['productName']}")
