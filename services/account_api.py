@@ -8,13 +8,16 @@ MOLI_BASE_URL = os.getenv("MOLI_BASE_URL")
 
 service_rate_limiter = Semaphore(5)
 
-async def get_contract_api(token, msisdn):
+async def get_account_structure_api(token, msisdn):
     async with service_rate_limiter:
-        service = "get_contract_api"
+        service = "get_account_structure_api"
         service_data = f"{service}_data"
+        level = "customer"
         result = {"msisdn": msisdn}
 
-        api_url = f"{MOLI_BASE_URL}/moli-customer/v1/customer/{msisdn}/contract"
+        api_params = urllib.parse.urlencode({"level": level})
+        api_url = f"{MOLI_BASE_URL}/moli-account/v1/accounts/{msisdn}/structure?{api_params}"
+
         headers = {
             "Authorization": f"Bearer {token}",
             "Content-Type": "application/json",
@@ -25,8 +28,8 @@ async def get_contract_api(token, msisdn):
                 async with session.get(api_url, headers=headers) as response:
                     response.raise_for_status()
                     payload = await response.json()
-
-                    # print("🛠️ get_contract_api Payload:", data)
+                    
+                    # print("🛠️ get_account_structure_api Payload:", data)
 
                     data = payload if isinstance(payload, dict) else {}
 
@@ -39,12 +42,14 @@ async def get_contract_api(token, msisdn):
                         "status": data.get("status", "N/A"),
                     }
 
-                    print(f"✅ get_contract_api: {response.status} {msisdn} {extracted_data['telco']} productType:{extracted_data['productType']} {extracted_data['productName']}")
+                    print(f"✅ get_account_structure_api: {response.status} {msisdn} {extracted_data['telco']} productType:{extracted_data['productType']} {extracted_data['productName']}")
 
                     result[service_data] = {
                         "customerStatus": f"✅ {response.status}",
                         **extracted_data,
                     }
+                    
+                    return result
 
         except aiohttp.ClientResponseError as error:
             return await handle_api_error(error, msisdn, service)
@@ -53,3 +58,24 @@ async def get_contract_api(token, msisdn):
             return await handle_api_error(error, msisdn, service)
 
         return result
+    
+
+async def get_account_api(token, msisdn):
+    result = {"msisdn": msisdn}
+
+    print(f"Successfully called account API with {msisdn}")
+    result= {
+        "idNo": msisdn
+    }
+
+    return result
+
+async def get_family_group_api(token, msisdn):
+    result = {"msisdn": msisdn}
+
+    print(f"Successfully called familyGroup API with {msisdn}")
+    result= {
+        "idNo": msisdn
+    }
+
+    return result

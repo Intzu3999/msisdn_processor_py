@@ -1,6 +1,5 @@
 import os
 import aiohttp
-import pandas as pd
 import urllib.parse
 from utils.handle_api_error import handle_api_error
 from asyncio import Semaphore

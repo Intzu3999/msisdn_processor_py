@@ -1,6 +1,5 @@
 import os
 import aiohttp
-import pandas as pd
 import urllib.parse
 from utils.handle_api_error import handle_api_error
 from asyncio import Semaphore
@@ -64,3 +63,33 @@ async def get_subscriber_api(token, msisdn):
             return await handle_api_error(error, msisdn, service)
         
         return result
+    
+async def get_list_subscriptions_api(token, id_no):
+    result = {"idNo": id_no}
+
+    print(f"Successfully called listSubscriptions API with {id_no}")
+    result= {
+        "idNo": id_no
+    }
+
+    return result
+
+async def put_bar_subscriber_api(token, id_no):
+    result = {"idNo": id_no}
+
+    print(f"Successfully called barSubscriber API with {id_no}")
+    result= {
+        "idNo": id_no
+    }
+
+    return result
+
+async def put_unbar_subscriber_api(token, id_no):
+    result = {"idNo": id_no}
+
+    print(f"Successfully called unbarSubscriber API with {id_no}")
+    result= {
+        "idNo": id_no
+    }
+
+    return result
