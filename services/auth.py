@@ -29,7 +29,7 @@ async def get_access_token():
         if TOKEN_CACHE["token"] and current_time < TOKEN_CACHE["expires_at"]:
             return TOKEN_CACHE["token"]
 
-        print("🔑 Fetching new access token...")
+        # print("Fetching token...")
 
         try:
             async with aiohttp.ClientSession() as session:
@@ -51,7 +51,7 @@ async def get_access_token():
                     TOKEN_CACHE["token"] = data["access_token"]
                     TOKEN_CACHE["expires_at"] = current_time + data.get("expires_in", 3600) - 10  # 10s buffer
 
-                    print("🔑 Access token updated successfully!")
+                    print("[OK] Access token")
 
                     return TOKEN_CACHE["token"]
 

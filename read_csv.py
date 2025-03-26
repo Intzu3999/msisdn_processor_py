@@ -1,3 +1,4 @@
+import sys
 import os
 import asyncio
 import aiohttp
@@ -8,6 +9,8 @@ from utils.datetime_utils import date_with_time
 from dotenv import load_dotenv
 from utils.field_mapping import FIELD_MAP, extract_fields_from_response
 from utils.api_map import api_map
+
+sys.stdout.reconfigure(encoding='utf-8')
 
 load_dotenv()
 
@@ -25,13 +28,13 @@ async def process_data():
     """Reads CSV, processes API calls, and saves results."""
     try:
         df = pd.read_csv(CSV_PATH)
-        print(f"✅ CSV loaded: {CSV_PATH}")
+        print(f"[OK] CSV loaded: {CSV_PATH}")
 
     except FileNotFoundError:
-        print(f"❌ Error: File '{args.filename}.csv' not found.")
+        print(f"[FAIL] Error: File '{args.filename}.csv' not found.")
         return
     except Exception as e:
-        print(f"❌ Error reading CSV: {e}")
+        print(f"[FAIL] Error reading CSV: {e}")
         return
 
     results = [] # Pandas new DataFrame
@@ -73,7 +76,7 @@ def save_results_to_excel(results):
 
     try:
         df_results.to_excel(OUTPUT_FILE, index=False, engine="openpyxl")
-        print(f"💾 Results saved successfully: {OUTPUT_FILE}")
+        print(f"Results saved: {OUTPUT_FILE}")
     except Exception as e:
         print(f"❌ Error saving results: {e}")
 
