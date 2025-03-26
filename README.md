@@ -17,7 +17,7 @@
 2) At root project create new virtual env: python -m venv venv 
 3) Start Python's virtual env: venv\Scripts\activate
 4) python.exe -m pip install --upgrade pip
-5) setuptools and wheel: pip install --upgrade setuptools wheel
+5) pip install --upgrade setuptools wheel
 6) pip install -r requirements.txt
  if panda failing it is most likely due to your venv setup.
  pip install --upgrade setuptools wheel meson ninja cython numpy (and any other missing/failed dependency installation based from your log)
@@ -25,12 +25,11 @@
 7) To close Python's virtual env: deactivate
 
 # TO RUN TEST
-1) python test/test_script_name.test.py
+1) python tests/test_script_name.test.py
 
 # TO RUN DATA PROCESSING SCRIPT
-1) place .csv file in /dataStream
-2) python read_csv.py
-3) python read_csv.py csvFileName --service service_name
+1) python read_csv.py
+2) python read_csv.py csvFileName --service servine_name
 
 # TO ADD / BUILD 
 1) get_account_structure_api 
