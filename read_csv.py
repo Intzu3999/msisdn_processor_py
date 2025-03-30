@@ -5,10 +5,12 @@ import aiohttp
 import pandas as pd
 import argparse
 from services.auth import get_access_token
+from services.extractor_mapping import get_service_extractor_function
+from services.field_mapping import FIELD_MAPPING
+from services.service_mapping import get_service_function
 from utils.datetime_utils import date_with_time
 from dotenv import load_dotenv
-from utils.field_mapping import FIELD_MAP, extract_fields_from_response
-from utils.api_map import api_map
+
 
 sys.stdout.reconfigure(encoding='utf-8')
 
@@ -52,25 +54,23 @@ async def process_data():
 
 async def fetch_api_data(token, msisdn, index, results, service):
     try:
-        if service not in api_map:
-            print(f"⚠️ Warning: API '{service}' is not mapped.")
-            return
-
-        api_func = api_map[service]
-        response = await api_func(token, msisdn)
+        service_function = get_service_function(service)
+        response = await service_function(token, msisdn)
 
         service_data = f"{service}_data"
         data = response.get(service_data, {})
 
-        field_mapping = FIELD_MAP.get(service, {})
-        extracted_data = extract_fields_from_response(data, field_mapping, service)
+        field_mapping = FIELD_MAPPING.get(service, {})
+        
+        extractor_function = get_service_extractor_function(service, data, field_mapping)
+        extracted_data = extractor_function(service, data, field_mapping)
 
         result_entry = {"msisdn": msisdn, **extracted_data} # Always include msisdn
         results.append(result_entry)      
 
     except Exception as e:
         print(f"❌ Error processing {msisdn}: {e}")
-
+ 
 def save_results_to_excel(results):
     df_results = pd.DataFrame(results)
 

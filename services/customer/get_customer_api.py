@@ -1,7 +1,7 @@
 import os
 import aiohttp
 import urllib.parse
-from utils.handle_api_error import handle_api_error
+from services.handle_api_error import handle_api_error
 from asyncio import Semaphore
 
 MOLI_BASE_URL = os.getenv("MOLI_BASE_URL")
@@ -40,6 +40,12 @@ async def get_customer_api(token, msisdn):
                     extracted_data = {
                         "idNo": identification.get("idNo", "N/A"),
                         "idType": identification.get("type", {}).get("code", "NA"),
+                        "addressLine1": address.get("addressLine1", "NA"),
+                        "addressLine2": address.get("addressLine2", "NA"),
+                        "addressLine3": address.get("addressLine3", "NA"),
+                        "Postcode": address.get("Postcode", "NA"),
+                        "city": address.get("city", "NA"),
+                        "state": address.get("state", {}).get("code", "NA"),
                         "countryCode": address.get("country", {}).get("code", "NA"),
                     }
 
