@@ -30,6 +30,19 @@ jobs:
           python -m pip install --upgrade pip
           pip install --upgrade setuptools wheel
           pip install -r requirements.txt
+          
+      - name: Create .env file
+        run: |
+          echo "ACCESS_TOKEN=${{ secrets.ACCESS_TOKEN }}" >> .env
+          echo "ACCESS_TOKEN_EXPIRY_TIME=${{ secrets.ACCESS_TOKEN_EXPIRY_TIME }}" >> .env
+          echo "AUTH_TOKEN_URL=${{ secrets.AUTH_TOKEN_URL }}" >> .env
+          echo "AUTH_CLIENT_ID=${{ secrets.AUTH_CLIENT_ID }}" >> .env
+          echo "AUTH_CLIENT_SECRET=${{ secrets.AUTH_CLIENT_SECRET }}" >> .env
+          echo "ACCOUNT_BASE_URL=${{ secrets.ACCOUNT_BASE_URL }}" >> .env
+          echo "MOLI_BASE_URL=${{ secrets.MOLI_BASE_URL }}" >> .env
+
+      - name: Restrict Permissions on .env File
+        run: chmod 600 .env
 
       - name: Run Tests or Scripts
         run: |
