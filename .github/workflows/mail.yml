@@ -1,0 +1,40 @@
+name: API Project CI
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  run-tests:
+    runs-on: ubuntu-latest 
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+
+      - name: Verify Python Version
+        run: python --version
+
+      - name: Install Dependencies
+        run: |
+          python -m venv venv
+          source venv/bin/activate
+          python -m pip install --upgrade pip
+          pip install --upgrade setuptools wheel
+          pip install -r requirements.txt
+
+      - name: Run Tests or Scripts
+        run: |
+          source venv/bin/activate
+          python python read_csv.py
+
+      - name: Deactivate Virtual Environment
+        run: deactivate
