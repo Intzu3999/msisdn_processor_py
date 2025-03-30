@@ -14,6 +14,11 @@ env_vars = [
     "MOLI_BASE_URL"
 ]
 
+all_passed = True
+
 for var in env_vars:
-    value = os.getenv(var)
-    print(f"✅ {var}: {value if value else '❌ NOT FOUND'}")
+    if os.getenv(var):
+        print(f"✅ {var}: Test passed")
+    else:
+        print(f"❌ {var}: Test failed")
+        all_passed = False

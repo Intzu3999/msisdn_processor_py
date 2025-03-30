@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 TOKEN_CACHE = {"token": None, "expires_at": 0}
-TOKEN_LOCK = asyncio.Lock()  # Prevent concurrent token refresh
+TOKEN_LOCK = asyncio.Lock() 
 
 async def get_access_token():
     """Fetches a new access token if expired or unavailable, with concurrency safety."""
@@ -18,7 +18,7 @@ async def get_access_token():
     AUTH_CLIENT_SECRET = os.getenv("AUTH_CLIENT_SECRET")
 
     if not AUTH_TOKEN_URL or not AUTH_CLIENT_ID or not AUTH_CLIENT_SECRET:
-        raise ValueError("❌ Missing required authentication environment variables!")
+        raise ValueError("❌ Missing environment")
 
     current_time = time.time()
 
@@ -28,8 +28,6 @@ async def get_access_token():
     async with TOKEN_LOCK:
         if TOKEN_CACHE["token"] and current_time < TOKEN_CACHE["expires_at"]:
             return TOKEN_CACHE["token"]
-
-        # print("Fetching token...")
 
         try:
             async with aiohttp.ClientSession() as session:
@@ -50,8 +48,6 @@ async def get_access_token():
 
                     TOKEN_CACHE["token"] = data["access_token"]
                     TOKEN_CACHE["expires_at"] = current_time + data.get("expires_in", 3600) - 10  # 10s buffer
-
-                    print("[OK] Access token")
 
                     return TOKEN_CACHE["token"]
 
