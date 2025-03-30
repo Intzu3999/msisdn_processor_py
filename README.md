@@ -4,8 +4,9 @@
 1) Processes msisdn list from csv asynchronously against API to extract payload data, flattens the data structure with Panda, and output the final result in excel table.
 
 # PYTHON BEST PRACTICE
-1) snake_case is preferred in Python (it is a ssssnake!)
-2) We follow the Pythonic way of handling API responses and extracting data. The strategy is centered around Python dictionaries!
+1) Classes → PascalCase (e.g., BaseService, GetCustomerAPIService)
+2) Variables and functions → snake_case (e.g., fetch_data, get_customer_api)
+3) We follow the Pythonic way of handling API responses and extracting data. The strategy is centered around Python dictionaries!
 
 # TO SETUP
 1) Install python3.exe x64-bit
