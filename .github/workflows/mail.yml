@@ -34,7 +34,7 @@ jobs:
       - name: Run Tests or Scripts
         run: |
           source venv/bin/activate
-          python python read_csv.py
+          python read_csv.py
 
       - name: Deactivate Virtual Environment
         run: deactivate
