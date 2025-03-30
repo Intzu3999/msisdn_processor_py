@@ -1,32 +1,14 @@
-def extract_fields_from_response(data, field_mapping, service):
-    """
-    Extracts required fields dynamically from API response data.
-    Supports nested field extraction.
-    """
-    extracted_data = {}
-    
-    for key, path in field_mapping.items():
-        value = data  # Start from the top level of JSON
-
-        try:
-            # If path is a list, traverse the JSON structure
-            for subkey in path:
-                if isinstance(value, list):  # Handle list case (e.g., data[0])
-                    value = value[0].get(subkey, "N/A") if value else "N/A"
-                else:
-                    value = value.get(subkey, "N/A")
-
-            extracted_data[key] = value
-        except (AttributeError, IndexError, KeyError, TypeError):
-            extracted_data[key] = "N/A"
-
-    return extracted_data
-
-FIELD_MAP = {
+FIELD_MAPPING = {
     "get_customer_api": {
         "customerStatus": ["customerStatus"],
         "idNo": ["idNo"],
         "idType": ["idType"],
+        "addressLine1": ["addressLine1"],
+        "addressLine2": ["addressLine2"],
+        "addressLine3": ["addressLine3"],
+        "Postcode": ["Postcode"],
+        "city": ["city"],
+        "state": ["state"],
         "countryCode": ["countryCode"],
     },
     "get_subscriber_api": {

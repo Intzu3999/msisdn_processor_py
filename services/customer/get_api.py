@@ -2,7 +2,7 @@ import os
 import aiohttp
 import pandas as pd
 import urllib.parse
-from utils.handle_api_error import handle_api_error
+from services.handle_api_error import handle_api_error
 from asyncio import Semaphore
 
 MOLI_BASE_URL = os.getenv("MOLI_BASE_URL")
