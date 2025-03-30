@@ -48,6 +48,3 @@ jobs:
         run: |
           source venv/bin/activate
           python read_csv.py
-
-      - name: Deactivate Virtual Environment
-        run: deactivate
