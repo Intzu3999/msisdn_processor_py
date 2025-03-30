@@ -34,5 +34,4 @@
 2) chain API calls
 
 # TO LEARN AND IMPROVE
-1) logging and sys
-2) typing schema
+1) Strategy Pattern using Python's Registry and abc abstract method classes
