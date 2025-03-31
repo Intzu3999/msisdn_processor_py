@@ -22,6 +22,7 @@ async def get_customer_api(token, msisdn):
             "Content-Type": "application/json",
         }
         
+        aiohttp.Client
         try:
             async with aiohttp.ClientSession() as session:
                 async with session.get(api_url, headers=headers) as response:
