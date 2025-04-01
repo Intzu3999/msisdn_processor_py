@@ -29,10 +29,9 @@ async def get_customer_api(token, msisdn):
                     response.raise_for_status()
                     payload = await response.json()
 
-                    # print("🛠️ get_customer_api Payload:", data)
-
                     data = payload[0] if isinstance(payload, list) and payload else {}
-
+                    # print("🛠️ get_customer_api Payload:", data)
+                    
                     personal_info = data.get("personalInfo", [{}])[0]
                     identification = personal_info.get("identification", [{}])[0]
                     contact_info = data.get("contact", {})
