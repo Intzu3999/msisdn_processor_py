@@ -43,6 +43,7 @@ async def process_data():
     tasks = [] # Panda's way process for each row asynchronously
 
     token = await get_access_token()
+    # print ({token})
 
     for index, row in df.iterrows():
         msisdn = row["msisdn"]
@@ -65,7 +66,7 @@ async def fetch_api_data(token, msisdn, index, results, service):
         extractor_function = get_service_extractor_function(service, data, field_mapping)
         extracted_data = extractor_function(service, data, field_mapping)
 
-        result_entry = {"msisdn": msisdn, **extracted_data} # Always include msisdn
+        result_entry = {"msisdn": msisdn, **extracted_data}
         results.append(result_entry)      
 
     except Exception as e:
