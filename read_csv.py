@@ -43,6 +43,7 @@ async def process_data():
     tasks = [] # Panda's way process for each row asynchronously
 
     token = await get_access_token()
+    # print ({token})
 
     for index, row in df.iterrows():
         msisdn = row["msisdn"]
