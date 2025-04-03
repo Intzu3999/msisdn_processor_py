@@ -37,6 +37,7 @@ EXTRACTOR_MAPPING = {
 "get_contract_api": extract_api_data,
 "get_customer_api": extract_api_data,
 "get_subscriber_api": extract_api_data,
+"open_orders_api": extract_api_data,
 }
 
 def get_service_extractor_function(service, data, field_mapping):
