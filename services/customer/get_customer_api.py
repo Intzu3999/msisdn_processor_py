@@ -42,13 +42,13 @@ async def get_customer_api(token, msisdn):
                         "addressLine1": address.get("addressLine1", "NA"),
                         "addressLine2": address.get("addressLine2", "NA"),
                         "addressLine3": address.get("addressLine3", "NA"),
-                        "Postcode": address.get("Postcode", "NA"),
+                        "postCode": address.get("postCode", "NA"),
                         "city": address.get("city", "NA"),
                         "state": address.get("state", {}).get("code", "NA"),
                         "countryCode": address.get("country", {}).get("code", "NA"),
                     }
 
-                    print(f"✅ get_customer_api: {response.status} {msisdn} id:{extracted_data['idType']} {extracted_data['idNo']} countryCode:{extracted_data['countryCode']}")
+                    print(f"✅ get_customer_api: {response.status} {msisdn} id:{extracted_data['idType']} {extracted_data['idNo']} address: {extracted_data['postCode']} {extracted_data['city']} {extracted_data['countryCode']}")
 
                     result[service_data] = {
                         "customerStatus": f"✅ {response.status}",

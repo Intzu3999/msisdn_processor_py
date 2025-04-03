@@ -6,7 +6,7 @@ from asyncio import Semaphore
 
 MOLI_BASE_URL = os.getenv("MOLI_BASE_URL")
 
-service_rate_limiter = Semaphore(5)
+service_rate_limiter = Semaphore(1)
 
 async def get_contract_api(token, msisdn):
     async with service_rate_limiter:

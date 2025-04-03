@@ -7,7 +7,7 @@ from asyncio import Semaphore
 
 MOLI_BASE_URL = os.getenv("MOLI_BASE_URL")
 
-service_rate_limiter = Semaphore(5)
+service_rate_limiter = Semaphore(1)
 
 async def get_subscriber_api(token, msisdn):
     async with service_rate_limiter:
@@ -36,6 +36,7 @@ async def get_subscriber_api(token, msisdn):
                     extracted_data = {
                         "msisdn": msisdn,  # Ensure `msisdn` is included
                         "telco": data.get("telco", "N/A"),
+                        "iccid": data.get("iccid", "N/A"),
                         "payType": data.get("type", "N/A"),
                         "isPrincipal": data.get("isPrincipal", "N/A"),
                         "status": data.get("status", "N/A"),
@@ -49,7 +50,7 @@ async def get_subscriber_api(token, msisdn):
                     raw_tenure = data.get("characteristic", {}).get("lifeCycleInfo", {}).get("tenure", "0")
                     extracted_data["tenure"] = f"{float(raw_tenure):.2f}" if raw_tenure.replace('.', '', 1).isdigit() else "0.00"
 
-                    print(f"✅ get_subscriber_api: {response.status} {msisdn} {extracted_data['telco']} {extracted_data['payType']} {extracted_data['isPrincipal']} {extracted_data['status']} tenure:{extracted_data['tenure']}")
+                    print(f"✅ get_subscriber_api: {response.status} {msisdn} {extracted_data['telco']} {extracted_data['subscriptionName']} {extracted_data['status']} {extracted_data['iccid']} {extracted_data['tenure']}")
 
                     result[service_data] = {
                         "customerStatus": f"✅ {response.status}",
