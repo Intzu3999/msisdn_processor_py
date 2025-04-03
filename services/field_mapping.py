@@ -1,6 +1,6 @@
 FIELD_MAPPING = {
     "get_customer_api": {
-        "customerStatus": ["customerStatus"],
+        "Status": ["customerStatus"],
         "idType": ["idType"],
         "idNo": ["idNo"],
         "addressLine1": ["addressLine1"],
@@ -12,7 +12,7 @@ FIELD_MAPPING = {
         "countryCode": ["countryCode"],
     },
     "get_subscriber_api": {
-        "customerStatus": ["customerStatus"],
+        "Status": ["customerStatus"],
         "telco": ["telco"],
         "iccid": ["iccid"],
         "payType": ["payType"],
@@ -26,17 +26,26 @@ FIELD_MAPPING = {
         "telecomType": ["telecomType"],
     },
     "get_account_structure_api": {
-        "customerStatus": ["customerStatus"],
+        "Status": ["customerStatus"],
         "accountId": ["accountId"],
         "billingCycle": ["billingCycle"],
     },
     "get_contract_api": {
-        "customerStatus": ["customerStatus"],
+        "Status": ["customerStatus"],
         "msisdn": ["msisdn"],
         "telco": ["telco"],
         "productType": ["productType"],
         "productName": ["productName"],
         "startDate": ["startDate"],
         "status": ["status"],
+    },
+        "open_orders_api": {
+        "Status": ["customerStatus"],
+        "msisdn": ["msisdn"],
+        "openOrderFlag": ["openOrderFlag"],
+        "orderNum": ["orderNumber"],
+        "outletId": ["outletId"],
+        "orderId": ["orderId"],
+        "orderStatus": ["orderStatus"],
     },
 }
