@@ -39,7 +39,7 @@ FIELD_MAPPING = {
         "startDate": ["startDate"],
         "status": ["status"],
     },
-        "open_orders_api": {
+    "open_orders_api": {
         "Status": ["customerStatus"],
         "msisdn": ["msisdn"],
         "openOrderFlag": ["openOrderFlag"],
@@ -47,5 +47,14 @@ FIELD_MAPPING = {
         "outletId": ["outletId"],
         "orderId": ["orderId"],
         "orderStatus": ["orderStatus"],
+    },
+    "postpaid_validation_api": {
+        "Status": ["customerStatus"],
+        "msisdn": ["msisdn"],
+        "custIdType": ["rule_1_result"],
+        "ageRange": ["rule_2_result"],
+        "hasBlacklist": ["rule_3_result"],
+        "upfrontPaymentRequired": ["rule_4_result"],
+        "maxLinePerCustomer": ["rule_5_result"],
     },
 }

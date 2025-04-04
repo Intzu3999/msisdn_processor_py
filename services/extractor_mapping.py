@@ -1,4 +1,4 @@
-def extract_api_data(service, data, field_mapping):
+def extract_flattenned_data(service, data, field_mapping):
     """
     Extracts required fields dynamically from API response data.
     Supports nested field extraction.
@@ -22,22 +22,23 @@ def extract_api_data(service, data, field_mapping):
 
     return extracted_data
 
-def extract_get_account_structure_api_data(service, data, field_mapping):
+def extract_another_data_structure(service, data, field_mapping):
     extracted_data = {}
-    # Logic to extract account structure data
+    # Logic to extract_another_data_structure
     return extracted_data
 
-def extract_xxx_data(service, data, field_mapping):
+def extract_nested_data(service, data, field_mapping):
     extracted_data = {}
-    # Logic to extract xxx API data
+    # Logic to extract extract_nested_data
     return extracted_data
 
 EXTRACTOR_MAPPING = {
-"get_account_structure_api": extract_api_data,
-"get_contract_api": extract_api_data,
-"get_customer_api": extract_api_data,
-"get_subscriber_api": extract_api_data,
-"open_orders_api": extract_api_data,
+"get_account_structure_api": extract_flattenned_data,
+"get_contract_api": extract_flattenned_data,
+"get_customer_api": extract_flattenned_data,
+"get_subscriber_api": extract_flattenned_data,
+"open_orders_api": extract_flattenned_data,
+"postpaid_validation_api": extract_flattenned_data,
 }
 
 def get_service_extractor_function(service, data, field_mapping):
