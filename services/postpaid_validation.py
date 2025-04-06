@@ -29,12 +29,12 @@ async def postpaid_validation_api(token, msisdn):
         headers = {
             "Authorization": f"Bearer {token}",
             "Content-Type": "application/json",
-            "Accept": "application/json",
+            "User-Agent": "PythonScript/1.0",
         }
         
         try:
             async with aiohttp.ClientSession() as session:
-                async with session.post(base_url, params=params, json=body, headers=headers) as response:
+                async with session.post(base_url, params=params, json=body, headers=headers, ssl=False) as response:
                     response.raise_for_status()
                     payload = await response.json()
 
