@@ -29,7 +29,7 @@ os.makedirs(OUTPUT_FOLDER, exist_ok=True)
 async def process_data():
     """Reads CSV, processes API calls, and saves results."""
     try:
-        df = pd.read_csv(CSV_PATH)
+        df = pd.read_csv((CSV_PATH), dtype={"msisdn": int})
         print(f"[OK] CSV loaded: {CSV_PATH}")
 
     except FileNotFoundError:
@@ -45,7 +45,7 @@ async def process_data():
     token = await get_access_token()
 
     for index, row in df.iterrows():
-        msisdn = row["msisdn"]
+        msisdn = int(row["msisdn"])
         tasks.append(fetch_api_data(token, msisdn, index, results, args.service))
 
     await asyncio.gather(*tasks)
@@ -57,8 +57,16 @@ async def fetch_api_data(token, msisdn, index, results, service):
         service_function = get_service_function(service)
         response = await service_function(token, msisdn)
 
+        # Add debug logging
+        print(f"DEBUG - Response for {msisdn}: {response}")  # Inspect structure
+        
         service_data = f"{service}_data"
         data = response.get(service_data, {})
+
+        # Add validation
+        if isinstance(data, list):
+            print(f"⚠️ Unexpected list structure for {msisdn}: {data}")
+            data = {}  # Fallback to empty dict
 
         field_mapping = FIELD_MAPPING.get(service, {})
         

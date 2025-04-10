@@ -57,4 +57,11 @@ FIELD_MAPPING = {
         "upfrontPaymentRequired": ["rule_4_result"],
         "maxLinePerCustomer": ["rule_5_result"],
     },
+    "account_structure_api": {
+        "Status": ["customerStatus"],
+        "Principal MSISDN": ["accounts", "principal_msisdn"],
+        "Total Supplementary": ["accounts", "total_supp_lines"], 
+        "Supplementary MSISDN": ["accounts", "supplementary_msisdn"],
+        "Is Original": ["accounts", "is_original_msisdn"]
+    }
 }

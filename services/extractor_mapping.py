@@ -39,6 +39,7 @@ EXTRACTOR_MAPPING = {
 "get_subscriber_api": extract_flattenned_data,
 "open_orders_api": extract_flattenned_data,
 "postpaid_validation_api": extract_flattenned_data,
+"account_structure_api": extract_flattenned_data,
 }
 
 def get_service_extractor_function(service, data, field_mapping):

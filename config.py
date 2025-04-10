@@ -8,6 +8,14 @@ load_dotenv()
 def get_env(var_name, default=None):
     return os.getenv(var_name, default)
 
+DB_CONFIG = {
+    "host": "localhost",
+    "user": "",
+    "password": "",
+    "database": "api_data",
+}
+
+# API Config
 ACCESS_TOKEN = os.getenv("ACCESS_TOKEN")
 ACCESS_TOKEN_EXPIRY_TIME = os.getenv("ACCESS_TOKEN_EXPIRY_TIME")
 AUTH_TOKEN_URL = os.getenv("AUTH_TOKEN_URL")

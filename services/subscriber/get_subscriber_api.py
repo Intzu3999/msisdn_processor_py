@@ -35,16 +35,16 @@ async def get_subscriber_api(token, msisdn):
 
                     extracted_data = {
                         "msisdn": msisdn,  # Ensure `msisdn` is included
-                        "telco": data.get("telco", "N/A"),
-                        "iccid": data.get("iccid", "N/A"),
-                        "payType": data.get("type", "N/A"),
-                        "isPrincipal": data.get("isPrincipal", "N/A"),
-                        "status": data.get("status", "N/A"),
-                        "subscriptionName": next(iter(data.get("subscriptions", {}).get("primary", [{}])), {}).get("name", "N/A"),
-                        "customerType": next(iter(data.get("characteristic", {}).get("customerInfo", [{}])), {}).get("type", {}).get("text", "N/A"),
-                        "subscriberType": next(iter(data.get("characteristic", {}).get("subscriberInfo", {}).get("subscriberType", [{}])), {}).get("text", "N/A"),
-                        "telecomType": next(iter(data.get("characteristic", {}).get("subscriberInfo", {}).get("telecomType", [{}])), {}).get("text", "N/A"),
-                        "activeDate": data.get("activeDate", "N/A"),
+                        "telco": data.get("telco", " "),
+                        "iccid": int(data.get("iccid", " ")),
+                        "payType": data.get("type", " "),
+                        "isPrincipal": data.get("isPrincipal", " "),
+                        "status": data.get("status", " "),
+                        "subscriptionName": next(iter(data.get("subscriptions", {}).get("primary", [{}])), {}).get("name", " "),
+                        "customerType": next(iter(data.get("characteristic", {}).get("customerInfo", [{}])), {}).get("type", {}).get("text", " "),
+                        "subscriberType": next(iter(data.get("characteristic", {}).get("subscriberInfo", {}).get("subscriberType", [{}])), {}).get("text", " "),
+                        "telecomType": next(iter(data.get("characteristic", {}).get("subscriberInfo", {}).get("telecomType", [{}])), {}).get("text", " "),
+                        "activeDate": data.get("activeDate", " "),
                     }
 
                     raw_tenure = data.get("characteristic", {}).get("lifeCycleInfo", {}).get("tenure", "0")
