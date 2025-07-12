@@ -48,6 +48,7 @@ async def get_access_token():
 
                     TOKEN_CACHE["token"] = data["access_token"]
                     TOKEN_CACHE["expires_at"] = current_time + data.get("expires_in", 3600) - 10  # 10s buffer
+                    print("🛠️ get_access_token Payload:", data)
 
                     return TOKEN_CACHE["token"]
 

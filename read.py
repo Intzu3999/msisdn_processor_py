@@ -17,8 +17,8 @@ sys.stdout.reconfigure(encoding='utf-8')
 load_dotenv()
 
 parser = argparse.ArgumentParser(description="Process CSV & API calls.")
-parser.add_argument("filename", nargs="?", default="test", help="CSV file name (without extension)")
-parser.add_argument("--service", default="get_customer_api", help="API service to run")
+parser.add_argument("filename", nargs="?", default="temp", help="CSV file name (without extension)")
+parser.add_argument("--service", default="get_subscriber_api", help="API service to run")
 args = parser.parse_args()
 
 CSV_PATH = os.path.join(os.path.dirname(__file__), "dataStream", f"{args.filename}.csv")
@@ -42,7 +42,11 @@ async def process_data():
     results = [] # Pandas new DataFrame
     tasks = [] # Panda's way process for each row asynchronously
 
+    # try:
+    # token = os.getenv("ACCESS_TOKEN")
+    # except:
     token = await get_access_token()
+    print(token)
 
     for index, row in df.iterrows():
         msisdn = row["msisdn"]

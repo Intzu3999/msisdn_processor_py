@@ -21,6 +21,7 @@ FIELD_MAPPING = {
         "tenure": ["tenure"],
         "isPrincipal": ["isPrincipal"],
         "status": ["status"],
+        "lifeCycleStatus": ["lifeCycleStatus"],
         "customerType": ["customerType"],
         "subscriberType": ["subscriberType"],
         "telecomType": ["telecomType"],
