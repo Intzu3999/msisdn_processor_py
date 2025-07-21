@@ -40,7 +40,7 @@ FIELD_MAPPING = {
         "startDate": ["startDate"],
         "status": ["status"],
     },
-    "open_orders_api": {
+    "get_open_orders_api": {
         "Status": ["customerStatus"],
         "msisdn": ["msisdn"],
         "openOrderFlag": ["openOrderFlag"],
@@ -49,7 +49,7 @@ FIELD_MAPPING = {
         "orderId": ["orderId"],
         "orderStatus": ["orderStatus"],
     },
-    "postpaid_validation_api": {
+    "get_postpaid_validation_api": {
         "Status": ["customerStatus"],
         "msisdn": ["msisdn"],
         "custIdType": ["rule_1_result"],

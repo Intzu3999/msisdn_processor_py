@@ -26,17 +26,16 @@ async def get_contract_api(token, msisdn):
                     response.raise_for_status()
                     payload = await response.json()
 
-                    # print("🛠️ get_contract_api Payload:", data)
-
                     data = payload if isinstance(payload, dict) else {}
+                    print("🛠️ get_contract_api Payload:", data)
 
                     extracted_data = {
                         "msisdn": data.get("msisdn", "N/A"),
                         "telco": data.get("telco", "N/A"),
-                        "productType": data.get("productType", "N/A"),  
-                        "productName": data.get("productName", "N/A"), 
-                        "startDate": data.get("startDate", "N/A"),
-                        "status": data.get("status", "N/A"),
+                        "productType": next(iter(data.get(("contracts", {}).get("productType", [{}]), "N/A"))),  
+                        "productName": next(iter(data.get("productName", "N/A"))), 
+                        "startDate": next(iter(data.get("startDate", "N/A"))),
+                        "status": next(iter(data.get("status", "N/A"))),
                     }
 
                     print(f"✅ get_contract_api: {response.status} {msisdn} {extracted_data['telco']} productType:{extracted_data['productType']} {extracted_data['productName']}")
