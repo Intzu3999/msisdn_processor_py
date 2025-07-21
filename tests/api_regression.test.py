@@ -6,6 +6,8 @@ services = [
     "get_contract_api",
     "get_customer_api",
     "get_subscriber_api",
+    "open_orders_api",
+    "postpaid_validation_api",
 ]
 
 for service in services:

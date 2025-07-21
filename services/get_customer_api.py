@@ -1,7 +1,7 @@
 import os
 import aiohttp
 import urllib.parse
-from utils.handle_api_error import handle_api_error
+from services.handle_api_error import handle_api_error
 from asyncio import Semaphore
 
 MOLI_BASE_URL = os.getenv("MOLI_BASE_URL")
@@ -74,10 +74,9 @@ async def get_customer_api(token, msisdn):
                     response.raise_for_status()
                     payload = await response.json()
 
-                    # print("🛠️ get_customer_api Payload:", data)
-
                     data = payload[0] if isinstance(payload, list) and payload else {}
-
+                    # print("🛠️ get_customer_api Payload:", data)
+                    
                     personal_info = data.get("personalInfo", [{}])[0]
                     identification = personal_info.get("identification", [{}])[0]
                     contact_info = data.get("contact", {})
@@ -86,10 +85,16 @@ async def get_customer_api(token, msisdn):
                     extracted_data = {
                         "idNo": identification.get("idNo", "N/A"),
                         "idType": identification.get("type", {}).get("code", "NA"),
+                        "addressLine1": address.get("addressLine1", "NA"),
+                        "addressLine2": address.get("addressLine2", "NA"),
+                        "addressLine3": address.get("addressLine3", "NA"),
+                        "postCode": address.get("postCode", "NA"),
+                        "city": address.get("city", "NA"),
+                        "state": address.get("state", {}).get("code", "NA"),
                         "countryCode": address.get("country", {}).get("code", "NA"),
                     }
 
-                    print(f"✅ get_customer_api: {response.status} {msisdn} id:{extracted_data['idType']} {extracted_data['idNo']} countryCode:{extracted_data['countryCode']}")
+                    print(f"✅ get_customer_api: {response.status} {msisdn} id:{extracted_data['idType']} {extracted_data['idNo']} address: {extracted_data['postCode']} {extracted_data['city']} {extracted_data['countryCode']}")
 
                     result[service_data] = {
                         "customerStatus": f"✅ {response.status}",
