@@ -45,7 +45,7 @@ async def process_data():
     # token = os.getenv("ACCESS_TOKEN")
     # except:
     token = await get_access_token()
-    print(token)
+    # print(token)
 
     for index, row in df.iterrows():
         msisdn = int(row["msisdn"])

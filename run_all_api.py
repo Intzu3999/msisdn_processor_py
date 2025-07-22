@@ -11,7 +11,7 @@ services = [
 ]
 
 for service in services:
-    command = f"python read.py {csv_file} --service {service}"
+    command = f"python run_api.py {csv_file} --service {service}"
     print(f"Executing: {command}")
 
     process = subprocess.run(command, shell=True, capture_output=True, text=True, encoding="utf-8")
