@@ -6,12 +6,12 @@ services = [
     "get_contract_api",
     "get_customer_api",
     "get_subscriber_api",
-    "open_orders_api",
-    "postpaid_validation_api",
+    "get_open_orders_api",
+    "get_postpaid_validation_api",
 ]
 
 for service in services:
-    command = f"python read_csv.py {csv_file} --service {service}"
+    command = f"python read.py {csv_file} --service {service}"
     print(f"Executing: {command}")
 
     process = subprocess.run(command, shell=True, capture_output=True, text=True, encoding="utf-8")

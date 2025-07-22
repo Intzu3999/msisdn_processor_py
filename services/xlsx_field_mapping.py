@@ -1,4 +1,4 @@
-FIELD_MAPPING = {
+XLSX_FIELD_MAPPING = {
     "get_customer_api": {
         "Status": ["customerStatus"],
         "idType": ["idType"],
@@ -12,7 +12,7 @@ FIELD_MAPPING = {
         "countryCode": ["countryCode"],
     },
     "get_subscriber_api": {
-        "Status": ["customerStatus"],
+        "Status": ["subscriberStatus"],
         "telco": ["telco"],
         "iccid": ["iccid"],
         "payType": ["payType"],
@@ -21,17 +21,13 @@ FIELD_MAPPING = {
         "tenure": ["tenure"],
         "isPrincipal": ["isPrincipal"],
         "status": ["status"],
+        "lifeCycleStatus": ["lifeCycleStatus"],
         "customerType": ["customerType"],
         "subscriberType": ["subscriberType"],
         "telecomType": ["telecomType"],
     },
-    "get_account_structure_api": {
-        "Status": ["customerStatus"],
-        "accountId": ["accountId"],
-        "billingCycle": ["billingCycle"],
-    },
     "get_contract_api": {
-        "Status": ["customerStatus"],
+        "Status": ["contractStatus"],
         "msisdn": ["msisdn"],
         "telco": ["telco"],
         "productType": ["productType"],
@@ -39,8 +35,8 @@ FIELD_MAPPING = {
         "startDate": ["startDate"],
         "status": ["status"],
     },
-    "open_orders_api": {
-        "Status": ["customerStatus"],
+    "get_open_orders_api": {
+        "Status": ["openOrderStatus"],
         "msisdn": ["msisdn"],
         "openOrderFlag": ["openOrderFlag"],
         "orderNum": ["orderNumber"],
@@ -48,17 +44,28 @@ FIELD_MAPPING = {
         "orderId": ["orderId"],
         "orderStatus": ["orderStatus"],
     },
-    "postpaid_validation_api": {
-        "Status": ["customerStatus"],
+    "get_postpaid_validation_api": {
+        "Status": ["postpaidValidationStatus"],
         "msisdn": ["msisdn"],
         "custIdType": ["rule_1_result"],
         "ageRange": ["rule_2_result"],
         "hasBlacklist": ["rule_3_result"],
         "upfrontPaymentRequired": ["rule_4_result"],
         "maxLinePerCustomer": ["rule_5_result"],
+    },    
+    "get_account_structure_api": {
+        "Telco": ["telco"],
+        "is Principal?": ["is_original_msisdn"],
+        "num of supp": ["total_supplementary"],
+        "account type": ["account_type"],
+        "linked principal": ["linked_principal_msisdn"],
+        "account_number": ["account_number"],
+        "msisdn": ["msisdn"],
+        "name": ["customer_name"],
+        "payType": ["pay_type"],
+        "status": ["status"],
     },
-    "account_structure_api": {
-        "Status": ["customerStatus"],
+    "get_account_structure_api_v1": {
         "Principal MSISDN": ["accounts", "principal_msisdn"],
         "Total Supplementary": ["accounts", "total_supp_lines"], 
         "Supplementary MSISDN": ["accounts", "supplementary_msisdn"],

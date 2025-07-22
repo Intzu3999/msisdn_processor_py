@@ -8,7 +8,7 @@ MOLI_BASE_URL = os.getenv("MOLI_BASE_URL")
 
 service_rate_limiter = Semaphore(1)
 
-async def postpaid_validation_api(token, msisdn):
+async def get_postpaid_validation_api(token, msisdn):
     async with service_rate_limiter:
         service = "postpaid_validation_api"
         service_data = f"{service}_data"

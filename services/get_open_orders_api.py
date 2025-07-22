@@ -8,7 +8,7 @@ MOLI_BASE_URL = os.getenv("MOLI_BASE_URL")
 
 service_rate_limiter = Semaphore(1)
 
-async def open_orders_api(token, msisdn):
+async def get_open_orders_api(token, msisdn):
     async with service_rate_limiter:
         service = "open_orders_api"
         service_data = f"{service}_data"

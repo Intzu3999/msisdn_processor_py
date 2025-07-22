@@ -18,7 +18,7 @@ all_passed = True
 
 for var in env_vars:
     if os.getenv(var):
-        print(f"✅ {var}: Test passed")
+        print(f"✅ {var}: PASSED")
     else:
-        print(f"❌ {var}: Test failed")
+        print(f"❌ {var}: FAILED")
         all_passed = False

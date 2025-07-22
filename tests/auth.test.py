@@ -17,10 +17,10 @@ def test_get_access_token ():
         assert isinstance(token, str), "❌ Test failed"
         assert len(token) > 10, "❌ Test failed"
         
-        print("✅ Test passed")
+        print("✅ PASSED")
 
     except Exception as e:
-        print(f"❌ Test failed: {e}")
+        print(f"❌ FAILED: {e}")
 
     finally:
         # Always close the event loop to avoid resource leaks

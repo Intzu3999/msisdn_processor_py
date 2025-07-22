@@ -1,11 +1,12 @@
 import sys
 import os
 import asyncio
+import aiohttp
 import pandas as pd
 import argparse
 from services.auth import get_access_token
 from services.extractor_mapping import get_service_extractor_function
-from services.xlsx_field_mapping import XLSX_FIELD_MAPPING
+from services.field_mapping import FIELD_MAPPING
 from services.service_mapping import get_service_function
 from utils.datetime_utils import date_with_time
 from dotenv import load_dotenv
@@ -41,11 +42,7 @@ async def process_data():
     results = [] # Pandas new DataFrame
     tasks = [] # Panda's way process for each row asynchronously
 
-    # try:
-    # token = os.getenv("ACCESS_TOKEN")
-    # except:
     token = await get_access_token()
-    print(token)
 
     for index, row in df.iterrows():
         msisdn = int(row["msisdn"])
@@ -60,23 +57,24 @@ async def fetch_api_data(token, msisdn, index, results, service):
         service_function = get_service_function(service)
         response = await service_function(token, msisdn)
 
+        # Add debug logging
+        print(f"DEBUG - Response for {msisdn}: {response}")  # Inspect structure
+        
         service_data = f"{service}_data"
         data = response.get(service_data, {})
 
-        xlsx_field_mapping = XLSX_FIELD_MAPPING.get(service, {})
+        # Add validation
+        if isinstance(data, list):
+            print(f"⚠️ Unexpected list structure for {msisdn}: {data}")
+            data = {}  # Fallback to empty dict
+
+        field_mapping = FIELD_MAPPING.get(service, {})
         
-        extractor_function = get_service_extractor_function(service, data, xlsx_field_mapping)
-        extracted_data = extractor_function(service, data, xlsx_field_mapping)
+        extractor_function = get_service_extractor_function(service, data, field_mapping)
+        extracted_data = extractor_function(service, data, field_mapping)
 
-        # will be able to handle both list and dict
-        if isinstance(extracted_data, list):
-            for item in extracted_data:
-                results.append({"msisdn": msisdn, **item})
-        else:
-            results.append({"msisdn": msisdn, **extracted_data})
-
-        # result_entry = {"msisdn": msisdn, **extracted_data}
-        # results.append(result_entry)      
+        result_entry = {"msisdn": msisdn, **extracted_data}
+        results.append(result_entry)      
 
     except Exception as e:
         print(f"❌ Error processing {msisdn}: {e}")
