@@ -75,7 +75,7 @@ def extract_account_structure(payload, msisdn):
             "pay_type": pay_type,
             "status": subscriber_status,
             "total_supplementary": len(supplementary_lines),
-            "is_original_msisdn": str(principal_msisdn) == str(msigit ssdn),
+            "is_original_msisdn": str(principal_msisdn) == str(msisdn),
         })
 
         # Add supplementary lines if any
