@@ -9,9 +9,9 @@ MOLI_BASE_URL = os.getenv("MOLI_BASE_URL")
 
 service_rate_limiter = Semaphore(5)
 
-async def get_account_structure_v1(token, msisdn):
+async def account_structure_v1(token, msisdn):
     async with service_rate_limiter:
-        service = "get_account_structure_api"
+        service = "account_structure_api_v1"
         service_data = f"{service}_data"
         level = "customer"
         result = {"msisdn": msisdn}

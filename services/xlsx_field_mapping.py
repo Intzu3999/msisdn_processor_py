@@ -55,7 +55,7 @@ XLSX_FIELD_MAPPING = {
     },    
     "get_account_structure_api": {
         "Telco": ["telco"],
-        "is Principal?": ["is_original_msisdn"],
+        "is Principal?": ["msisdn"],
         "num of supp": ["total_supplementary"],
         "account type": ["account_type"],
         "linked principal": ["linked_principal_msisdn"],
@@ -65,7 +65,7 @@ XLSX_FIELD_MAPPING = {
         "payType": ["pay_type"],
         "status": ["status"],
     },
-    "get_account_structure_api_v1": {
+    "account_structure_api_v1": {
         "Principal MSISDN": ["accounts", "principal_msisdn"],
         "Total Supplementary": ["accounts", "total_supp_lines"], 
         "Supplementary MSISDN": ["accounts", "supplementary_msisdn"],

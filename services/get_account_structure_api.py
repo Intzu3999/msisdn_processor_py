@@ -9,7 +9,7 @@ service_rate_limiter = Semaphore(1)
 
 async def get_account_structure_api(token, msisdn):
     async with service_rate_limiter:
-        service = "account_structure_api"
+        service = "get_account_structure_api"
         service_data = f"{service}_data"
         result = {"msisdn": msisdn}
 
@@ -26,22 +26,17 @@ async def get_account_structure_api(token, msisdn):
         try:
             async with aiohttp.ClientSession() as session:
                 async with session.get(base_url, params=params, headers=headers) as response:
+                    response.raise_for_status()
+                    payload = await response.json()
 
                      # Validate response format first
-                    payload = await response.json()
-                    if not isinstance(payload, dict):
-                        raise ValueError(f"Unexpected response format: {type(payload)}")
-                    
-                    # print(f"DEBUG - Raw payload: {payload}")  # Inspect actual structure
-                    
-                    # Ensure structure exists
-                    if "structure" not in payload:
+                    if not isinstance(payload, dict) or "structure" not in payload:
                         payload["structure"] = []
-                    
+
                     extracted_data = extract_account_structure(payload, msisdn)
 
-                    print(extracted_data)
-                    
+                    print(f"✅ get_account_structure_api: {response.status} {msisdn} total_accounts: {len(payload['structure'])} extracted_rows: {len(extracted_data)}")
+
                     result[service_data] = {
                         "customerStatus": f"✅ {response.status}",
                         "msisdn": msisdn,
@@ -56,9 +51,9 @@ async def get_account_structure_api(token, msisdn):
         return result
 
 
-def extract_account_structure(payload, original_msisdn):
+def extract_account_structure(payload, msisdn):
     extracted_data = []
-    
+
     for account in payload.get("structure", []):
         telco = account.get("telco", "N/A")
         principal = account.get("principal", {})
@@ -69,35 +64,34 @@ def extract_account_structure(payload, original_msisdn):
         subscriber_status = principal.get("subscriberStatus", "N/A")
         supplementary_lines = account.get("supplementary", [])
 
-        # If there are no supplementary lines, we still want the principal row
-        if not supplementary_lines:
+        # Always append the principal
+        extracted_data.append({
+            "telco": telco,
+            "account_type": "principal",
+            "linked_principal_msisdn": principal_msisdn,
+            "account_number": principal_account_number,
+            "msisdn": principal_msisdn,
+            "customer_name": customer_name,
+            "pay_type": pay_type,
+            "status": subscriber_status,
+            "total_supplementary": len(supplementary_lines),
+            "is_original_msisdn": str(principal_msisdn) == str(msigit ssdn),
+        })
+
+        # Add supplementary lines if any
+        for supp in supplementary_lines:
             extracted_data.append({
                 "telco": telco,
-                "account_type": "principal",
+                "account_type": "supplementary",
                 "linked_principal_msisdn": principal_msisdn,
-                "account_number": principal_account_number,
-                "msisdn": principal_msisdn,
-                "customer_name": customer_name,
-                "pay_type": pay_type,
-                "status": subscriber_status,
-                "total_supplementary": 0,
-                "is_original_msisdn": str(principal_msisdn) == str(original_msisdn),
+                "account_number": supp.get("accountNumber", "N/A"),
+                "msisdn": supp.get("msisdn", "N/A"),
+                "customer_name": supp.get("customerName", "N/A"),
+                "pay_type": supp.get("payType", "N/A"),
+                "status": supp.get("subscriberStatus", "N/A"),
+                "total_supplementary": len(supplementary_lines),
+                "is_original_msisdn": str(supp.get("msisdn", "")) == str(msisdn),
             })
-        else:
-            # Add supplementary lines as flattened rows
-            for supp in supplementary_lines:
-                extracted_data.append({
-                    "telco": telco,
-                    "account_type": "supplementary",
-                    "linked_principal_msisdn": principal_msisdn,
-                    "account_number": supp.get("accountNumber", "N/A"),
-                    "msisdn": supp.get("msisdn", "N/A"),
-                    "customer_name": supp.get("customerName", "N/A"),
-                    "pay_type": supp.get("payType", "N/A"),
-                    "status": supp.get("subscriberStatus", "N/A"),
-                    "total_supplementary": len(supplementary_lines),
-                    "is_original_msisdn": str(supp.get("msisdn", "")) == str(original_msisdn),
-                })
 
     return extracted_data
 
