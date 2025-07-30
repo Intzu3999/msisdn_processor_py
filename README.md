@@ -57,3 +57,5 @@ Type variables | PascalCase	| T, ResponseType
 3) Configure service_rate_limiter at config level
 4) import logging . Replace prints with logger.info()
 5) Save processed data to local MySQL. Require: design appropriate db design.
+6) learn about sync and async in detail
+7) learn data extraction more in detail (already okay but need more practice!)
