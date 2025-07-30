@@ -1,6 +1,6 @@
 import subprocess
 
-csv_file = "test"
+csv_file = "digiWithContract"
 services = [
     "get_account_structure_api",
     "get_contract_api",

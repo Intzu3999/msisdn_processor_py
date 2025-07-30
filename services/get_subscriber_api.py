@@ -51,7 +51,7 @@ async def get_subscriber_api(token, msisdn):
                     raw_tenure = data.get("characteristic", {}).get("lifeCycleInfo", {}).get("tenure", "0")
                     extracted_data["tenure"] = f"{float(raw_tenure):.2f}" if raw_tenure.replace('.', '', 1).isdigit() else "0.00"
 
-                    print(f"✅ get_subscriber_api: {response.status} {msisdn} {extracted_data['telco']} {extracted_data['payType']} {extracted_data['isPrincipal']} {extracted_data['subscriptionName']} status:{extracted_data['status']} lifecycle:{extracted_data['lifeCycleStatus']}")
+                    print(f"✅ get_subscriber_api: {response.status} {msisdn} {extracted_data['telco']} {extracted_data['payType']} is principal:{extracted_data['isPrincipal']} {extracted_data['subscriptionName']} status:{extracted_data['status']} lifecycle:{extracted_data['lifeCycleStatus']}")
 
                     result[service_data] = {
                         "customerStatus": f"✅ {response.status}",

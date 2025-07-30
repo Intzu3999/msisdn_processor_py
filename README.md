@@ -43,8 +43,8 @@ Type variables | PascalCase	| T, ResponseType
 1) python tests/api_regression.test.py
 
 ## TO RUN DATA PROCESSING SCRIPT
-1) python read_csv.py
-2) python read_csv.py csvFileName --service service_name
+1) python run_api.py (defaults to test dataStream and get_subscriber_api service)
+2) python run_all_api.py celcom --service get_customer_api
 
 ## WORK IN PROGRESS ... 
 1) get_account_structure_api 
