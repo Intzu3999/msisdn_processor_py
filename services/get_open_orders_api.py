@@ -45,7 +45,7 @@ async def get_open_orders_api(token, msisdn):
                     if extracted_data["openOrderFlag"] == "N":
                         print(f"🟢 open_orders_api: {response.status} {msisdn} {extracted_data['openOrderFlag']}")
                     elif extracted_data["openOrderFlag"] == "Y":
-                        print(f"🟡 open_orders_api: {response.status} {msisdn} {extracted_data['openOrderFlag']} orderNum:{extracted_data['orderNumber']} outletId:{extracted_data['outletId']} orderId:{extracted_data['orderId']} status:{extracted_data['orderStatus']}")
+                        print(f"🟡 open_orders_api: {response.status} {msisdn} {extracted_data['openOrderFlag']} outletId: {extracted_data['outletId']} orderId: {extracted_data['orderId']}")
                     else:
                         print(f"🔴 open_orders_api: {response.status} {msisdn} {extracted_data['openOrderFlag']} Unknown order status")
 
