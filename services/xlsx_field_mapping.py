@@ -70,5 +70,13 @@ XLSX_FIELD_MAPPING = {
         "Total Supplementary": ["accounts", "total_supp_lines"], 
         "Supplementary MSISDN": ["accounts", "supplementary_msisdn"],
         "Is Original": ["accounts", "is_original_msisdn"]
+    },
+    "get_family_group_api": {
+        "Status": ["customerStatus"],
+        "msisdn": ["msisdn"],
+        "telco": ["telco"],
+        "familyGroupId": ["familyGroupId"],
+        "totalFamilyMember": ["totalFamilyMember"],
+        "familyGroupLevel": ["familyGroupLevel"],
     }
 }

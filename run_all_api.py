@@ -1,13 +1,14 @@
 import subprocess
 
-csv_file = "digiWithContract"
+csv_file = "temp"
 services = [
     "get_account_structure_api",
-    "get_contract_api",
+    # "get_contract_api",
     "get_customer_api",
     "get_subscriber_api",
     "get_open_orders_api",
-    "get_postpaid_validation_api",
+    "get_family_group_api",
+    # "get_postpaid_validation_api",
 ]
 
 for service in services:
