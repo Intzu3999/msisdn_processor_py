@@ -2,7 +2,6 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from email.mime.application import MIMEApplication 
-from .email_reports import email_reports
 from utils.datetime_utils import date_with_time
 from datetime import datetime, timedelta
 from dotenv import load_dotenv
