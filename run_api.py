@@ -7,6 +7,7 @@ from services.auth import get_access_token
 from services.extractor_mapping import get_service_extractor_function
 from services.xlsx_field_mapping import XLSX_FIELD_MAPPING
 from services.service_mapping import get_service_function
+from utils.email_reports import email_reports
 from utils.datetime_utils import date_with_time
 import builtins
 
