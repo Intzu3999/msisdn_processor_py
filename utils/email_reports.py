@@ -2,11 +2,14 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from email.mime.application import MIMEApplication 
-from config import EMAIL_USER, EMAIL_PASSWORD, EMAIL_TO, SMTP_SERVER, SMTP_PORT
-from .email_reports import send_reports
+from .email_reports import email_reports
 from utils.datetime_utils import date_with_time
 from datetime import datetime, timedelta
+from dotenv import load_dotenv
+
 import os
+
+load_dotenv()
 
 EMAIL_USER = os.getenv("EMAIL_USER")
 EMAIL_PASSWORD = os.getenv("EMAIL_PASSWORD")
