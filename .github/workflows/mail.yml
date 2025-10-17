@@ -47,7 +47,7 @@ jobs:
       - name: Run Main Scripts (Generate Reports)
         run: |
           source venv/bin/activate
-          python run_api.py
+          python run_api.py > /dev/null 2>&1
 
       - name: Email Reports
         env:
