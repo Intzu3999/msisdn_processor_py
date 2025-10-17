@@ -92,3 +92,9 @@ def save_results_to_excel(results):
 
 if __name__ == "__main__":
     asyncio.run(process_data())
+
+    try:
+        from utils.email_reports import send_latest_reports
+        send_latest_reports()
+    except Exception as e:
+        print(f"⚠️ Email sending failed: {e}")
