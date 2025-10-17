@@ -44,29 +44,18 @@ jobs:
       - name: Restrict Permissions on .env File
         run: chmod 600 .env
 
-      - name: Run Tests or Scripts
+      - name: Run Main Scripts (Generate Reports)
         run: |
           source venv/bin/activate
           python run_api.py
-          
-  email:
-    runs-on: ubuntu-latest
-    # needs: run-tests
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v3
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: "3.11"
-
-      - name: Install smtplib dependencies (none required)
-        run: echo "Using built-in smtplib"
-
-      - name: Send Test Email
+      - name: Email Reports
         env:
           EMAIL_USER: ${{ secrets.EMAIL_USER }}
           EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
           EMAIL_TO: ${{ secrets.EMAIL_TO }}
-        run: python email_reports.py
+          SMTP_SERVER: smtp.gmail.com
+          SMTP_PORT: 465
+        run: |
+          source venv/bin/activate
+          python utils/email_reports.py
