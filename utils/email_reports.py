@@ -153,4 +153,7 @@ def email_reports(
 #         print("❌ Failed to send email:", e)
 
 if __name__ == "__main__":
-    email_reports()
+    test_report = ["test_result/test_report.xlsx"]
+    email_reports(test_report,
+    subject="Test Report",
+    body="Test Report Sent Successfully.")
