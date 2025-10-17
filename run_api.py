@@ -99,7 +99,7 @@ if __name__ == "__main__":
     asyncio.run(process_data())
 
     try:
-        from utils.email_reports import send_latest_reports
-        send_latest_reports()
+        from utils.email_reports import email_reports
+        email_reports([OUTPUT_FILE])
     except Exception as e:
-        print(f"⚠️ Email sending failed: {e}")
+        print(f"⚠️ Failed to send email: {e}")
