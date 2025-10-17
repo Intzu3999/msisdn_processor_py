@@ -1,13 +1,14 @@
+import sys
+import os
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from email.mime.application import MIMEApplication 
-from utils.datetime_utils import date_with_time
 from datetime import datetime, timedelta
 from dotenv import load_dotenv
 
-import os
-
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from utils.datetime_utils import date_with_time
 load_dotenv()
 
 EMAIL_USER = os.getenv("EMAIL_USER")
