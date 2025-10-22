@@ -144,9 +144,9 @@ def email_reports(report_paths, email_subject="Test Report - Local Script", emai
 
 if __name__ == "__main__":
 
-    test_report_path = ["test_result/test_report.xlsx"]
+    # test_report_path = ["test_result/test_report.xlsx"]
     current_time = date_with_time()
     email_subject = f"CI/CD Trigerred Report - {current_time}"
     email_body = f"Please find the attached reports - {current_time}"
 
-    email_reports(test_report_path, email_subject, email_body)
+    email_reports(email_subject, email_body)
