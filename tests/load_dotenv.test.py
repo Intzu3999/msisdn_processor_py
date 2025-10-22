@@ -11,7 +11,12 @@ env_vars = [
     "AUTH_CLIENT_ID",
     "AUTH_CLIENT_SECRET",
     "ACCOUNT_BASE_URL",
-    "MOLI_BASE_URL"
+    "MOLI_BASE_URL",
+    "EMAIL_USER",
+    "EMAIL_PASSWORD",
+    "EMAIL_TO",
+    "SMTP_SERVER",
+    "SMTP_PORT"
 ]
 
 all_passed = True

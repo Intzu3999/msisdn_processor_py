@@ -7,7 +7,10 @@ from services.auth import get_access_token
 from services.extractor_mapping import get_service_extractor_function
 from services.xlsx_field_mapping import XLSX_FIELD_MAPPING
 from services.service_mapping import get_service_function
+from utils.email_reports import email_reports
 from utils.datetime_utils import date_with_time
+import builtins
+
 from dotenv import load_dotenv
 
 
@@ -16,7 +19,7 @@ sys.stdout.reconfigure(encoding='utf-8')
 load_dotenv()
 
 parser = argparse.ArgumentParser(description="Process CSV & API calls.")
-parser.add_argument("filename", nargs="?", default="temp", help="CSV file name (without extension)")
+parser.add_argument("filename", nargs="?", default="test", help="CSV file name (without extension)")
 parser.add_argument("--service", default="get_subscriber_api", help="API service to run")
 args = parser.parse_args()
 
@@ -56,30 +59,33 @@ async def process_data():
     save_results_to_excel(results)
 
 async def fetch_api_data(token, msisdn, index, results, service):
-    try:
-        service_function = get_service_function(service)
-        response = await service_function(token, msisdn)
+    if os.getenv("CI", "false") == "true":
+        builtins.print = lambda *a, **k: None
 
-        service_data = f"{service}_data"
-        data = response.get(service_data, {})
+        try:
+            service_function = get_service_function(service)
+            response = await service_function(token, msisdn)
 
-        xlsx_field_mapping = XLSX_FIELD_MAPPING.get(service, {})
-        
-        extractor_function = get_service_extractor_function(service, data, xlsx_field_mapping)
-        extracted_data = extractor_function(service, data, xlsx_field_mapping)
+            service_data = f"{service}_data"
+            data = response.get(service_data, {})
 
-        # will be able to handle both list and dict
-        if isinstance(extracted_data, list):
-            for item in extracted_data:
-                results.append({"msisdn": msisdn, **item})
-        else:
-            results.append({"msisdn": msisdn, **extracted_data})
+            xlsx_field_mapping = XLSX_FIELD_MAPPING.get(service, {})
+            
+            extractor_function = get_service_extractor_function(service, data, xlsx_field_mapping)
+            extracted_data = extractor_function(service, data, xlsx_field_mapping)
 
-        # result_entry = {"msisdn": msisdn, **extracted_data}
-        # results.append(result_entry)      
+            # will be able to handle both list and dict
+            if isinstance(extracted_data, list):
+                for item in extracted_data:
+                    results.append({"msisdn": msisdn, **item})
+            else:
+                results.append({"msisdn": msisdn, **extracted_data})
 
-    except Exception as e:
-        print(f"❌ Error processing {msisdn}: {e}")
+            # result_entry = {"msisdn": msisdn, **extracted_data}
+            # results.append(result_entry)      
+
+        except Exception as e:
+            print(f"❌ Error processing {msisdn}: {e}")
  
 def save_results_to_excel(results):
     df_results = pd.DataFrame(results)
@@ -92,3 +98,9 @@ def save_results_to_excel(results):
 
 if __name__ == "__main__":
     asyncio.run(process_data())
+
+    try:
+        from utils.email_reports import email_reports
+        email_reports([OUTPUT_FILE])
+    except Exception as e:
+        print(f"⚠️ Failed to send email: {e}")

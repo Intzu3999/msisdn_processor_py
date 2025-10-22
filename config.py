@@ -28,3 +28,16 @@ MOLI_BASE_URL = os.getenv("MOLI_BASE_URL")
 SELENIUM_DRIVER_PATH = os.path.join(BASE_DIR, "drivers", "chromedriver.exe")
 PLAYWRIGHT_BINARY_PATH = os.path.join(BASE_DIR, "browsers", "playwright.exe")
 ANDROID_EMULATOR_PATH = "C:/Users/YourUser/AppData/Local/Android/sdk/emulator/emulator.exe"
+
+# Email Config
+EMAIL_USER = os.getenv("EMAIL_USER")
+EMAIL_PASSWORD = os.getenv("EMAIL_PASSWORD")
+EMAIL_TO = os.getenv("EMAIL_TO", "intzucareers@gmail.com")
+
+# GMAIL
+SMTP_SERVER = os.getenv("SMTP_SERVER", "smtp.gmail.com")
+SMTP_PORT = int(os.getenv("SMTP_PORT", 465))
+
+# OUTLOOK
+# SMTP_SERVER = os.getenv("SMTP_SERVER", "smtp.office365.com")
+# SMTP_PORT = int(os.getenv("SMTP_PORT", 587))

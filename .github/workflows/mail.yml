@@ -30,6 +30,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install --upgrade setuptools wheel
           pip install -r requirements.txt
+          pip install -e .
           
       - name: Create .env file
         run: |
@@ -44,7 +45,18 @@ jobs:
       - name: Restrict Permissions on .env File
         run: chmod 600 .env
 
-      - name: Run Tests or Scripts
+      - name: Run Main Scripts (Generate Reports)
         run: |
           source venv/bin/activate
-          python run_api.py
+          python run_api.py > /dev/null 2>&1
+
+      - name: Email Reports
+        env:
+          EMAIL_USER: ${{ secrets.EMAIL_USER }}
+          EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
+          EMAIL_TO: ${{ secrets.EMAIL_TO }}
+          SMTP_SERVER: smtp.gmail.com
+          SMTP_PORT: 465
+        run: |
+          source venv/bin/activate
+          python utils/email_reports.py

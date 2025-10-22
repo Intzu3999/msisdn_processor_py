@@ -2,8 +2,8 @@
 from setuptools import setup, find_packages
 
 setup(
-    name="your_project",
-    version="0.1",
+    name="msisdn_processor_py",
+    version="25.01",
     packages=find_packages(),
     install_requires=[
         'aiohttp',

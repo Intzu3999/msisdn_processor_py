@@ -37,19 +37,23 @@ Type variables | PascalCase	| T, ResponseType
  if panda failing it is most likely due to your venv setup.
  pip install --upgrade setuptools wheel meson ninja cython numpy (and any other missing/failed dependency installation based from your log)
  pip install --force-reinstall --no-cache-dir pandas
-7) To close Python's virtual env: deactivate
+7) pip install aiohttp python-dotenv pandas
+8) To close Python's virtual env: deactivate
 
 ## TO RUN TEST
-1) python tests/api_regression.test.py
+1) python tests/load_dotenv.test.py
+2) python tests/auth.test.py
 
 ## TO RUN DATA PROCESSING SCRIPT
-1) python run_api.py (defaults to test dataStream and get_subscriber_api service)
-2) python run_all_api.py celcom --service get_customer_api
+1) python run_api.py (defaults CLI to test --service get_subscriber_api)
+2) python run_api.py celcom --service get_customer_api
+3) python run_api.py digi --service get_account_structure_api
+4) python run_all_api.py
 
 ## WORK IN PROGRESS ... 
 1) get_account_structure_api 
 2) chain API calls
-3) Standardize API calls design according to Python's best practice
+3) Standardize API calls design using CLASS ABC
 
 ## TO LEARN AND IMPROVE
 1) Strategy Pattern using Python's Registry and abc abstract method classes

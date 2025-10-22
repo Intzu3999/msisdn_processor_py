@@ -17,7 +17,7 @@ sys.stdout.reconfigure(encoding='utf-8')
 load_dotenv()
 
 parser = argparse.ArgumentParser(description="Process CSV & API calls.")
-parser.add_argument("filename", nargs="?", default="temp", help="CSV file name (without extension)")
+parser.add_argument("filename", nargs="?", default="test", help="CSV file name (without extension)")
 parser.add_argument("--service", default="get_subscriber_api", help="API service to run")
 args = parser.parse_args()
 

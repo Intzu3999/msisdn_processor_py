@@ -1,6 +1,6 @@
 import subprocess
 
-csv_file = "temp"
+csv_file = "test"
 services = [
     "get_account_structure_api",
     # "get_contract_api",
