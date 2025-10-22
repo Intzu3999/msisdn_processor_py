@@ -63,6 +63,7 @@ async def fetch_api_data(token, msisdn, index, results, service):
     # DO NOT HARDCODE HERE!! 
     # CONFIGURE AT CONFIG LEVEL!
     # COMMENT THIS TWO LINES WHEN TESTING LOCALLY
+    # USE LOG ! NOT PRINT ! 
     if os.getenv("CI", "false") == "true":
         builtins.print = lambda *a, **k: None
 
