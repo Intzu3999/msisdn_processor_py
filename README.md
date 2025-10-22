@@ -33,7 +33,7 @@ Type variables | PascalCase	| T, ResponseType
 3) Start Python's virtual env: venv\Scripts\activate
 4) python.exe -m pip install --upgrade pip
 5) pip install --upgrade setuptools wheel
-6) pip install -r requirements.txt
+6) python -m pip install -r requirements.txt
  if panda failing it is most likely due to your venv setup.
  pip install --upgrade setuptools wheel meson ninja cython numpy (and any other missing/failed dependency installation based from your log)
  pip install --force-reinstall --no-cache-dir pandas
