@@ -19,30 +19,20 @@ SMTP_PORT = int(os.getenv("SMTP_PORT", 465))
 RESULT_FOLDER = "result"
 VALID_EXTENSIONS = (".xlsx", ".csv", ".html")
 
-def email_reports(
-    file_paths,
-    subject=None,
-    body=None,
-):
+def email_reports(report_paths, email_subject="default subject", email_body="default body"):
 
-    if not file_paths:
+    if not report_paths:
         print("⚠️ No files provided to email.")
         return
-
-    # Default subject/body with current timestamp
-    current_time = date_with_time()
-    subject = subject or f"CI/CD Report - {current_time}"
-    body = body or f"Attached are your latest reports - {current_time}"
 
     # Compose email
     msg = MIMEMultipart()
     msg["From"] = EMAIL_USER
     msg["To"] = EMAIL_TO
-    msg["Subject"] = subject
-    msg.attach(MIMEText(body, "plain"))
+    msg["Subject"] = email_subject
+    msg.attach(MIMEText(email_body, "plain"))
 
-    # Attach each file
-    for path in file_paths:
+    for path in report_paths:
         try:
             with open(path, "rb") as f:
                 part = MIMEApplication(f.read(), Name=os.path.basename(path))
@@ -54,18 +44,18 @@ def email_reports(
     # Send email
     try:
         if SMTP_PORT == 465:
-            # Gmail SSL port
+            # Gmail - SSL port
             with smtplib.SMTP_SSL(SMTP_SERVER, SMTP_PORT) as server:
                 server.login(EMAIL_USER, EMAIL_PASSWORD)
                 server.send_message(msg)
         else:
-            # TLS (e.g., Outlook/Office365)
+            # Outlook/Office365 -TLS port
             with smtplib.SMTP(SMTP_SERVER, SMTP_PORT) as server:
                 server.starttls()
                 server.login(EMAIL_USER, EMAIL_PASSWORD)
                 server.send_message(msg)
 
-        print(f"✅ Email sent successfully to {EMAIL_TO} with {len(file_paths)} file(s).")
+        print(f"✅ Email sent! with {len(report_paths)} file(s).")
 
     except Exception as e:
         print(f"❌ Failed to send email: {e}")
@@ -153,7 +143,10 @@ def email_reports(
 #         print("❌ Failed to send email:", e)
 
 if __name__ == "__main__":
-    test_report = ["test_result/test_report.xlsx"]
-    email_reports(test_report,
-    subject="Test Report",
-    body="Test Report Sent Successfully.")
+
+    test_report_path = ["test_result/test_report.xlsx"]
+    current_time = date_with_time()
+    email_subject = "Test - CI/CD Report - {current_time}"
+    email_body = "Test Report Sent Successfully. Please find the attached reports - {current_time}"
+
+    email_reports(test_report_path, email_subject, email_body)
