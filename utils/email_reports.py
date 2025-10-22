@@ -15,11 +15,11 @@ EMAIL_USER = os.getenv("EMAIL_USER")
 EMAIL_PASSWORD = os.getenv("EMAIL_PASSWORD")
 EMAIL_TO = os.getenv("EMAIL_TO")
 SMTP_SERVER = os.getenv("SMTP_SERVER", "smtp.gmail.com")
-SMTP_PORT = int(os.getenv("SMTP_PORT", 465))
+SMTP_PORT = int(os.getenv("SMTP_PORT", ))
 RESULT_FOLDER = "result"
 VALID_EXTENSIONS = (".xlsx", ".csv", ".html")
 
-def email_reports(report_paths, email_subject="default subject", email_body="default body"):
+def email_reports(report_paths, email_subject="Test Report - Local Script", email_body="Please find attached report"):
 
     if not report_paths:
         print("⚠️ No files provided to email.")
@@ -146,7 +146,7 @@ if __name__ == "__main__":
 
     test_report_path = ["test_result/test_report.xlsx"]
     current_time = date_with_time()
-    email_subject = f"Test - CI/CD Report - {current_time}"
-    email_body = f"Test Report Sent Successfully. Please find the attached reports - {current_time}"
+    email_subject = f"CI/CD Trigerred Report - {current_time}"
+    email_body = f"Please find the attached reports - {current_time}"
 
     email_reports(test_report_path, email_subject, email_body)

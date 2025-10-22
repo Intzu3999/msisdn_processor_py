@@ -59,6 +59,10 @@ async def process_data():
     save_results_to_excel(results)
 
 async def fetch_api_data(token, msisdn, index, results, service):
+    # REQUIRE SOLUTION!!
+    # DO NOT HARDCODE HERE!! 
+    # CONFIGURE AT CONFIG LEVEL!
+    # COMMENT THIS TWO LINES WHEN TESTING LOCALLY
     if os.getenv("CI", "false") == "true":
         builtins.print = lambda *a, **k: None
 
@@ -87,7 +91,7 @@ async def fetch_api_data(token, msisdn, index, results, service):
         except Exception as e:
             print(f"❌ Error processing {msisdn}: {e}")
  
-def save_results_to_excel(results):
+def save_results_to_excel(results):#
     df_results = pd.DataFrame(results)
 
     try:
